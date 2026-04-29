@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda Blanca y Manuel</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           FONDO Y ESTILOS GENERALES
+           ========================================= */
+        body {
+            margin: 0; padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+
+        img {
+            image-rendering: high-quality; 
+            image-rendering: -webkit-optimize-contrast; 
+        }
+
+        /* FONDO DIFUMINADO */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background-image: url('3.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px) brightness(0.7); 
+            z-index: -1;
+        }
+
+        /* =========================================
+           CONTENEDOR DE INVITACIÓN
+           ========================================= */
+        .contenedor-principal {
+            position: relative;
+            width: 90vw;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .imagen-capa {
+            width: 100%;
+            height: auto;
+            border-radius: 4px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity; 
+        }
+
+        .sobre { 
+            position: relative; 
+            z-index: 10; 
+            pointer-events: auto; 
+            cursor: pointer;
+        }
+        
+        #wrapperInvitacion {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; 
+        }
+
+        .invitacion-interna {
+            opacity: 0;
+            transform: scale(0.9);
+            cursor: zoom-in; 
+            pointer-events: none; 
+        }
+
+        .hint-zoom {
+            position: absolute;
+            top: 15px; right: 15px;
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+            z-index: 25;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none; 
+        }
+
+        /* ANIMACIONES DE APERTURA */
+        .abierto .sobre {
+            opacity: 0;
+            transform: translateY(-120px) scale(1.1);
+            pointer-events: none; 
+        }
+
+        .abierto .invitacion-interna {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto; 
+        }
+
+        .abierto #wrapperInvitacion:hover .hint-zoom {
+            opacity: 1; 
+        }
+
+        .texto-clic {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 15px rgba(0,0,0,0.9);
+            z-index: 30;
+            animation: latido 1.5s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* =========================================
+           BOTONES INVISIBLES ELEGANTES (PORTADA)
+           ========================================= */
+        .botones-container {
+            margin-top: 25px;
+            display: none; 
+            flex-direction: row;
+            justify-content: space-around;
+            gap: 10px;
+            z-index: 40;
+            position: relative;
+            width: 100%;
+        }
+
+        .btn-invisible {
+            background: none;
+            border: none;
+            color: #f5f0e6;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-invisible:hover {
+            color: #cda87a;
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           MODALES Y BOTONES DE REGRESAR
+           ========================================= */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
+            animation: slideUp 0.4s ease;
+        }
+
+        .img-modal {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* BOTÓN REGRESAR (Invisible dentro de modal) */
+        .btn-regresar-modal {
+            background: none;
+            border: none;
+            color: #4a3728; /* Café oscuro para contrastar con el blanco */
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-regresar-modal:hover {
+            color: #cda87a; /* Cambia a dorado al pasar el mouse */
+            transform: scale(1.05);
+        }
+
+        #imgZoomContainer {
+            max-width: 95vw;
+            max-height: 85vh;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+
+        .zoomed-in {
+            transform: scale(1.7); 
+            cursor: zoom-out !important;
+        }
+
+        .btn-musica-flotante {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: white;
+            border: 2px solid #cda87a;
+            color: #cda87a;
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            z-index: 200;
+            font-size: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="musica" src="SONG.mp3" preload="auto" loop></audio>
+
+    <div class="contenedor-principal" id="mainContainer">
+        <div class="texto-clic" id="hintText">¡Haga clic aquí!</div>
+        
+        <div id="wrapperInvitacion">
+            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
+            <div class="hint-zoom">🔍︎</div>
+        </div>
+        
+        <img src="1.png" class="imagen-capa sobre" id="imgSobre">
+        
+        <div class="botones-container" id="botonesNavegacion">
+            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')"> ⤷ Ceremonia Religiosa </button>
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')"> ⤷ Civil y Recepción</button>
+        </div>
+    </div>
+
+    <div id="modalZoom" class="modal" onclick="cerrarZoom(event)">
+        <div style="text-align: center;">
+            <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+            <br>
+            <button class="btn-regresar-modal" style="color: white;">Regresar</button>
+        </div>
+    </div>
+
+    <div id="modalReligiosa" class="modal">
+        <div class="modal-content">
+            <img src="iglesia.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; font-size: 2.5rem; color:#cda87a; margin-bottom:10px;">Ceremonia Religiosa</h2>
+            <p><strong>Lugar:</strong> Templo de la Inmaculada Concepción</p>
+            <p>Angangueo, Michoacán | 1:00 PM</p>
+            <button class="btn-regresar-modal" onclick="cerrarModal('modalReligiosa')">Regresar</button>
+        </div>
+    </div>
+
+    <div id="modalCivil" class="modal">
+        <div class="modal-content">
+            <img src="1.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; font-size: 2.5rem; color:#cda87a; margin-bottom:10px;">Civil y Recepción</h2>
+            <p><strong>Civil:</strong> 5:00 PM | <strong>Recepción:</strong> 5:40 PM</p>
+            <p>San José del Rincón, Estado de México</p>
+            <button class="btn-regresar-modal" onclick="cerrarModal('modalCivil')">Regresar</button>
+        </div>
+    </div>
+
+    <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">⏸</button>
+
+    <script>
+        const container = document.getElementById('mainContainer');
+        const imgSobre = document.getElementById('imgSobre');
+        const audio = document.getElementById('musica');
+        const btnNav = document.getElementById('botonesNavegacion');
+        const hint = document.getElementById('hintText');
+        const btnM = document.getElementById('btnMusic');
+        const imgInvitacion = document.getElementById('imgInvitacion');
+        const modalZoom = document.getElementById('modalZoom');
+        const imgZoomContainer = document.getElementById('imgZoomContainer');
+
+        let isOpen = false;
+
+        function abrirSobre() {
+            if (!isOpen) {
+                container.classList.add('abierto');
+                hint.style.display = 'none';
+                audio.play();
+                btnM.style.display = 'block';
+                setTimeout(() => { btnNav.style.display = 'flex'; }, 800);
+                isOpen = true;
+            }
+        }
+
+        imgSobre.addEventListener('click', abrirSobre);
+        hint.addEventListener('click', abrirSobre);
+
+        imgInvitacion.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            modalZoom.style.display = 'flex';
+        });
+
+        function hacerZoomDoble(event) {
+            event.stopPropagation(); 
+            imgZoomContainer.classList.toggle('zoomed-in');
+        }
+
+        function cerrarZoom() {
+            modalZoom.style.display = 'none';
+            imgZoomContainer.classList.remove('zoomed-in');
+        }
+
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                btnM.innerText = '⏸';
+            } else {
+                audio.pause();
+                btnM.innerText = '▶';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                imgZoomContainer.classList.remove('zoomed-in');
+            }
+        }
+    </script>
+</body>
+</html>
