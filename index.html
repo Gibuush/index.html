@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boda Blanca y Manuel</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Fondo Difuminado */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('3.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px) brightness(0.6); 
+            z-index: -1;
+        }
+
+        /* Contenedor Principal */
+        .contenedor-principal {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .imagen-capa {
+            width: 100%;
+            height: auto;
+            border-radius: 8px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* SOBRE: Capta el primer clic */
+        .sobre { 
+            position: relative; 
+            z-index: 100; 
+            cursor: pointer;
+        }
+        
+        /* INVITACIÓN: Debajo del sobre */
+        #wrapperInvitacion {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; 
+        }
+
+        .invitacion-interna {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        /* ESTADO ABIERTO: El sobre se vuelve "fantasma" para dejar pasar los clics */
+        .abierto .sobre {
+            opacity: 0;
+            transform: translateY(-120px) scale(0.8);
+            pointer-events: none; /* CLAVE: Permite clics en lo que hay debajo */
+        }
+
+        .abierto .invitacion-interna {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .texto-clic {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+            z-index: 110;
+            animation: latido 1.5s infinite;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        /* BOTONES EN PARALELO */
+        .botones-container {
+            margin-top: 25px;
+            display: none; 
+            flex-direction: row; /* Paralelo por defecto */
+            justify-content: space-around;
+            width: 100%;
+            z-index: 120; /* Por encima de todo para asegurar clic */
+        }
+
+        .btn-invisible {
+            background: none;
+            border: none;
+            color: #f5f0e6;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.7rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: 0.3s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-invisible:hover {
+            color: #cda87a;
+        }
+
+        /* RESPONSIVO PARA MÓVIL */
+        @media (max-width: 480px) {
+            .botones-container {
+                flex-direction: column; /* Uno sobre otro en móviles muy pequeños */
+                gap: 5px;
+            }
+            .btn-invisible { font-size: 1.5rem; }
+            .texto-clic { font-size: 2.2rem; }
+        }
+
+        /* MODALES */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .img-modal {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-llegar {
+            display: inline-block;
+            background: #cda87a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .nota-maps {
+            font-size: 0.65rem;
+            color: #888;
+            margin-top: 10px;
+            display: block;
+            font-style: italic;
+        }
+
+        .btn-regresar {
+            background: none;
+            border: none;
+            color: #4a3728;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        /* MÚSICA A LA DERECHA */
+        .btn-musica-flotante {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            border-radius: 50%;
+            width: 55px; height: 55px;
+            border: 2px solid #cda87a;
+            z-index: 150;
+            display: none;
+            cursor: pointer;
+            font-size: 22px;
+            color: #cda87a;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="musica" src="SONG.mp3" loop preload="auto"></audio>
+
+    <div class="contenedor-principal" id="mainContainer">
+        <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
+        
+        <div id="wrapperInvitacion">
+            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
+        </div>
+        
+        <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
+        
+        <div class="botones-container" id="botonesNavegacion">
+            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">⤷ Ceremonia Religiosa</button>
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')">⤷ Civil y Recepción</button>
+        </div>
+    </div>
+
+    <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="iglesia.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Religiosa</h2>
+            <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
+            <button class="btn-regresar" onclick="cerrarModal('modalReligiosa')">Regresar</button>
+        </div>
+    </div>
+
+    <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="1.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
+            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
+            
+            <a href="https://www.google.com/maps/search/?api=1&query=19.6912502681542,-100.13536671855067" target="_blank" class="btn-llegar">
+                📍 Cómo llegar a la ubicación
+            </a>
+            <span class="nota-maps">* Las imágenes de Google Maps podrían estar desactualizadas.</span>
+
+            <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
+        </div>
+    </div>
+
+    <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">⏸</button>
+
+    <script>
+        const container = document.getElementById('mainContainer');
+        const audio = document.getElementById('musica');
+        const btnNav = document.getElementById('botonesNavegacion');
+        const hint = document.getElementById('hintText');
+        const btnM = document.getElementById('btnMusic');
+
+        let isOpen = false;
+
+        function abrirSobre() {
+            if (!isOpen) {
+                container.classList.add('abierto');
+                hint.style.display = 'none';
+                audio.play();
+                btnM.style.display = 'block';
+                setTimeout(() => { 
+                    btnNav.style.display = 'flex'; 
+                }, 600);
+                isOpen = true;
+            }
+        }
+
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function toggleMusic() {
+            if (audio.paused) { audio.play(); btnM.innerText = '⏸'; } 
+            else { audio.pause(); btnM.innerText = '▶'; }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
