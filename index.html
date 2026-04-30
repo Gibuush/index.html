@@ -75,7 +75,6 @@
             transform: scale(0.9);
         }
 
-        /* Indicador de lupa */
         .lupa-zoom {
             position: absolute;
             top: 15px;
@@ -90,6 +89,7 @@
             z-index: 110;
             opacity: 0;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
 
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
@@ -106,145 +106,183 @@
             transform: scale(1);
         }
 
+        /* --- TEXTO INICIAL: PULSO SÓLIDO --- */
         .texto-clic {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Dancing Script', cursive;
             font-size: 2.8rem;
-            color: white;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
             z-index: 110;
-            animation: latido 1.5s infinite;
             pointer-events: none;
             width: 100%;
+            color: #fff;
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.8);
+            animation: pulso-solido 2s ease-in-out infinite;
         }
 
-        @keyframes latido {
+        @keyframes pulso-solido {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
+            50% { transform: translate(-50%, -50%) scale(1.08); }
         }
 
         .botones-container {
             margin-top: 25px;
             display: none; 
-            flex-direction: row;
-            justify-content: space-around;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
             z-index: 120;
+            gap: 15px;
         }
 
         .btn-invisible {
             background: none;
             border: none;
-            color: #f5f0e6;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.7rem;
             cursor: pointer;
-            padding: 10px;
-            transition: 0.3s;
+            padding: 5px 10px;
             text-decoration: none;
+            display: inline-block;
         }
 
-        /* --- SOLUCIÓN AL ZOOM EN CELULAR --- */
-        #modalZoom {
+        /* --- BOTONES CON OLA HACIA LA DERECHA --- */
+        .texto-ola {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: rgba(245, 240, 230, 0.3);
+            background: linear-gradient(
+                to right, 
+                rgba(245, 240, 230, 0.3) 0%, 
+                rgba(245, 240, 230, 1) 50%, 
+                rgba(245, 240, 230, 0.3) 100%
+            );
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: ola-derecha 3.5s linear infinite;
+        }
+
+        @keyframes ola-derecha {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Modales */
+        .modal {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98);
+            background: rgba(0,0,0,0.95); 
             display: none;
-            z-index: 300;
-            overflow: auto; /* Permite que el usuario deslice */
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .zoom-content {
-            display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100%;
-            width: 100%;
+            z-index: 200;
             padding: 20px;
         }
 
-        #imgZoomContainer {
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
             width: 100%;
-            max-width: 500px; /* Tamaño normal inicial */
-            height: auto;
-            border-radius: 4px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: zoom-in;
+            max-width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Cuando se hace zoom: */
-        #imgZoomContainer.zoomed-in {
-            width: 180%; /* Crece mucho más que la pantalla */
-            max-width: none;
-            cursor: zoom-out;
-            margin: auto;
+        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+
+        .btn-llegar {
+            display: block;
+            width: 85%;
+            background: #cda87a;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 35px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-regresar {
+            background: none;
+            border: none;
+            color: #4a3728;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        #modalZoom {
+            overflow: auto;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 60px;
         }
 
         .cerrar-zoom-x {
             position: fixed;
-            top: 20px; right: 20px;
-            width: 45px; height: 45px;
-            background: rgba(255,255,255,0.2);
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 310;
-            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            z-index: 220;
+            border: 1px solid rgba(255,255,255,0.4);
         }
 
         .cerrar-zoom-x svg { width: 22px; height: 22px; fill: white; }
 
-        /* Botón música */
+        #imgZoomContainer {
+            width: 95%;
+            max-width: 1000px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+            margin-bottom: 50px;
+        }
+
+        #imgZoomContainer.zoomed-in {
+            width: 180%;
+            max-width: none;
+            transform: scale(1);
+            cursor: zoom-out;
+        }
+
+        /* --- BOTÓN MÚSICA FLOTANTE --- */
         .btn-musica-flotante {
             position: fixed;
-            bottom: 25px; right: 25px;
+            bottom: 25px;
+            right: 25px;
             background: white;
             border-radius: 50%;
             width: 55px; height: 55px;
             border: 2px solid #cda87a;
             z-index: 150;
-            display: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: none; /* Se activa al abrir */
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         .icon-play, .icon-pause { width: 22px; height: 22px; fill: #cda87a; }
-
-        /* Estilos modales información */
-        .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 400;
-        }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            width: 85%;
-            max-width: 380px;
-            text-align: center;
-        }
-        .btn-llegar {
-            display: block;
-            background: #cda87a;
-            color: white;
-            padding: 12px;
-            border-radius: 25px;
-            text-decoration: none;
-            margin: 15px 0;
-        }
+        .icon-play { display: none; }
     </style>
 </head>
 <body>
@@ -258,111 +296,122 @@
             <div class="lupa-zoom">
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M10 7v2H8v1h2v2h1v-2h2V9h-2V7h-1z"/></svg>
             </div>
-            <img src="2.jpeg" class="imagen-capa invitacion-interna" id="imgInvitacion">
+            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
         </div>
         
         <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
         
         <div class="botones-container" id="botonesNavegacion">
-            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">⤷ Ceremonia Religiosa</button>
-            <button class="btn-invisible" onclick="abrirModal('modalCivil')">⤷ Ceremonia Civil y Recepción</button>
+            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">
+                <span class="texto-ola">⤷ Ceremonia Religiosa</span>
+            </button>
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')">
+                <span class="texto-ola">⤷ Ceremonia Civil y Recepción</span>
+            </button>
         </div>
     </div>
 
-    <div id="modalZoom">
-        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </div>
-        <div class="zoom-content" onclick="cerrarZoom()">
-            <img src="2.jpeg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
-        </div>
-    </div>
-
+    <!-- Modales -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <img src="iglesia.png" style="width:100%; border-radius:10px;">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a;">Ceremonia Religiosa</h2>
+            <img src="iglesia.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Religiosa</h2>
             <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
-            <button class="btn-invisible" style="color:black;" onclick="cerrarModal('modalReligiosa')">Regresar</button>
+            <button class="btn-regresar" onclick="cerrarModal('modalReligiosa')">Regresar</button>
         </div>
     </div>
 
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <img src="4.jpeg" style="width:100%; border-radius:10px;">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a;">Civil y Recepción</h2>
-            <p>San José del Rincón, Edo. Méx.</p>
-            <a href="https://maps.google.com" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
-            <button class="btn-invisible" style="color:black;" onclick="cerrarModal('modalCivil')">Regresar</button>
+            <img src="4.jpeg" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
+            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
+            <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
+            <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
         </div>
     </div>
 
+    <div id="modalZoom" class="modal" onclick="cerrarZoom()">
+        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+        <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+    </div>
+
+    <!-- Botón música -->
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
         <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-        <svg class="icon-play" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
     </button>
 
     <script>
+        const container = document.getElementById('mainContainer');
         const audio = document.getElementById('musica');
+        const btnNav = document.getElementById('botonesNavegacion');
+        const hint = document.getElementById('hintText');
+        const btnM = document.getElementById('btnMusic');
+        const iconPlay = document.querySelector('.icon-play');
+        const iconPause = document.querySelector('.icon-pause');
         const imgZoom = document.getElementById('imgZoomContainer');
-        const modalZoom = document.getElementById('modalZoom');
 
-        // Bucle de música suave
+        let isOpen = false;
+
         audio.addEventListener('timeupdate', function() {
-            if(this.currentTime > this.duration - 0.4){
+            var buffer = 0.4;
+            if(this.currentTime > this.duration - buffer){
                 this.currentTime = 0;
                 this.play();
             }
         });
 
         function abrirSobre() {
-            document.getElementById('mainContainer').classList.add('abierto');
-            document.getElementById('hintText').style.display = 'none';
-            audio.play().catch(e => console.log("Audio block"));
-            document.getElementById('btnMusic').style.display = 'flex';
-            setTimeout(() => { document.getElementById('botonesNavegacion').style.display = 'flex'; }, 600);
+            if (!isOpen) {
+                container.classList.add('abierto');
+                hint.style.display = 'none';
+                audio.play().catch(error => console.log("Audio interactivo"));
+                
+                // ESTA LÍNEA ES LA QUE HACÍA FALTA:
+                btnM.style.display = 'flex'; 
+
+                setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
+                isOpen = true;
+            }
         }
 
-        function abrirZoom() {
-            modalZoom.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
+            } else {
+                audio.pause();
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
         }
 
-        function cerrarZoom() {
-            modalZoom.style.display = 'none';
+        function abrirZoom() { 
+            document.getElementById('modalZoom').style.display = 'flex'; 
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function cerrarZoom() { 
+            document.getElementById('modalZoom').style.display = 'none'; 
             imgZoom.classList.remove('zoomed-in');
             document.body.style.overflow = 'auto';
         }
 
-        function hacerZoomDoble(e) {
-            e.stopPropagation();
+        function hacerZoomDoble(e) { 
+            e.stopPropagation(); 
             imgZoom.classList.toggle('zoomed-in');
-            // Al hacer zoom, centramos el scroll
-            if(imgZoom.classList.contains('zoomed-in')) {
-                setTimeout(() => {
-                    modalZoom.scrollTo({
-                        top: modalZoom.scrollHeight / 4,
-                        left: modalZoom.scrollWidth / 4,
-                        behavior: 'smooth'
-                    });
-                }, 100);
-            }
         }
 
         function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
         function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
         
-        function toggleMusic() {
-            const playIcon = document.querySelector('.icon-play');
-            const pauseIcon = document.querySelector('.icon-pause');
-            if (audio.paused) {
-                audio.play();
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-            } else {
-                audio.pause();
-                playIcon.style.display = 'block';
-                pauseIcon.style.display = 'none';
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                cerrarModal(event.target.id);
             }
         }
     </script>
