@@ -106,7 +106,6 @@
             transform: scale(1);
         }
 
-        /* --- TEXTO INICIAL: PULSO SÓLIDO --- */
         .texto-clic {
             position: absolute;
             top: 50%; left: 50%;
@@ -145,7 +144,6 @@
             display: inline-block;
         }
 
-        /* --- BOTONES CON OLA HACIA LA DERECHA --- */
         .texto-ola {
             font-family: 'Dancing Script', cursive;
             font-size: 1.8rem;
@@ -168,7 +166,6 @@
             100% { background-position: -200% center; }
         }
 
-        /* Modales */
         .modal {
             position: fixed;
             top: 0; left: 0;
@@ -264,7 +261,6 @@
             cursor: zoom-out;
         }
 
-        /* --- BOTÓN MÚSICA FLOTANTE --- */
         .btn-musica-flotante {
             position: fixed;
             bottom: 25px;
@@ -276,7 +272,7 @@
             z-index: 150;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            display: none; /* Se activa al abrir */
+            display: none;
             justify-content: center;
             align-items: center;
         }
@@ -296,7 +292,8 @@
             <div class="lupa-zoom">
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M10 7v2H8v1h2v2h1v-2h2V9h-2V7h-1z"/></svg>
             </div>
-            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
+            <!-- CORREGIDO A 2.jpeg -->
+            <img src="2.jpeg" class="imagen-capa invitacion-interna" id="imgInvitacion">
         </div>
         
         <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
@@ -335,10 +332,10 @@
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </div>
-        <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+        <!-- CORREGIDO A 2.jpeg -->
+        <img src="2.jpeg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
-    <!-- Botón música -->
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
         <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -369,10 +366,7 @@
                 container.classList.add('abierto');
                 hint.style.display = 'none';
                 audio.play().catch(error => console.log("Audio interactivo"));
-                
-                // ESTA LÍNEA ES LA QUE HACÍA FALTA:
-                btnM.style.display = 'flex'; 
-
+                btnM.style.display = 'flex'; // ACTIVA EL BOTÓN DE MÚSICA
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
                 isOpen = true;
             }
