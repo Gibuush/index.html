@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boda Blanca y Manuel</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url('3.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px) brightness(0.6); 
+            z-index: -1;
+        }
+
+        .contenedor-principal {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .imagen-capa {
+            width: 100%;
+            height: auto;
+            border-radius: 8px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sobre { 
+            position: relative; 
+            z-index: 100; 
+            cursor: pointer;
+        }
+        
+        #wrapperInvitacion {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1; 
+        }
+
+        .invitacion-interna {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .lupa-zoom {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 110;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
+
+        .abierto .lupa-zoom { opacity: 1; }
+
+        .abierto .sobre {
+            opacity: 0;
+            transform: translateY(-120px) scale(0.8);
+            pointer-events: none; 
+        }
+
+        .abierto .invitacion-interna {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .texto-clic {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.9);
+            z-index: 110;
+            animation: latido 1.5s infinite;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .botones-container {
+            margin-top: 25px;
+            display: none; 
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+            z-index: 120;
+        }
+
+        .btn-invisible {
+            background: none;
+            border: none;
+            color: #f5f0e6;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.7rem;
+            cursor: pointer;
+            padding: 10px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-invisible:hover { color: #cda87a; }
+
+        @media (max-width: 480px) {
+            .botones-container { flex-direction: column; gap: 5px; }
+            .btn-invisible { font-size: 1.5rem; }
+            .texto-clic { font-size: 2.2rem; }
+        }
+
+        /* Modales */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+
+        .btn-llegar {
+            display: block;
+            width: 85%;
+            background: #cda87a;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 35px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: background 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-regresar {
+            background: none;
+            border: none;
+            color: #4a3728;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .cerrar-zoom-x {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 210;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+
+        .cerrar-zoom-x:hover { background: rgba(255, 255, 255, 0.4); }
+
+        .cerrar-zoom-x svg { width: 22px; height: 22px; fill: white; }
+
+        #imgZoomContainer {
+            max-width: 95vw;
+            max-height: 85vh;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+        .zoomed-in { transform: scale(1.7); cursor: zoom-out !important; }
+
+        /* Música Flotante */
+        .btn-musica-flotante {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: white;
+            border-radius: 50%;
+            width: 55px; height: 55px;
+            border: 2px solid #cda87a;
+            z-index: 150;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-play, .icon-pause { width: 22px; height: 22px; fill: #cda87a; }
+        .icon-play { display: none; margin-left: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- Música en formato m4a con bucle infinito -->
+    <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
+
+    <div class="contenedor-principal" id="mainContainer">
+        <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
+        
+        <div id="wrapperInvitacion" onclick="abrirZoom()">
+            <div class="lupa-zoom">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M10 7v2H8v1h2v2h1v-2h2V9h-2V7h-1z"/></svg>
+            </div>
+            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
+        </div>
+        
+        <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
+        
+        <div class="botones-container" id="botonesNavegacion">
+            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">⤷ Ceremonia Religiosa</button>
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')">⤷ Civil y Recepción</button>
+        </div>
+    </div>
+
+    <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="iglesia.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Religiosa</h2>
+            <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
+            <button class="btn-regresar" onclick="cerrarModal('modalReligiosa')">Regresar</button>
+        </div>
+    </div>
+
+    <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="1.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
+            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
+            <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
+            <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
+        </div>
+    </div>
+
+    <div id="modalZoom" class="modal" onclick="cerrarZoom()">
+        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+        <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+    </div>
+
+    <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
+        <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+
+    <script>
+        const container = document.getElementById('mainContainer');
+        const audio = document.getElementById('musica');
+        const btnNav = document.getElementById('botonesNavegacion');
+        const hint = document.getElementById('hintText');
+        const btnM = document.getElementById('btnMusic');
+        const iconPlay = document.querySelector('.icon-play');
+        const iconPause = document.querySelector('.icon-pause');
+
+        let isOpen = false;
+
+        function abrirSobre() {
+            if (!isOpen) {
+                container.classList.add('abierto');
+                hint.style.display = 'none';
+                // El audio inicia tras la interacción del usuario
+                audio.play().catch(error => console.log("Autoplay bloqueado:", error));
+                btnM.style.display = 'flex';
+                setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
+                isOpen = true;
+            }
+        }
+
+        function abrirZoom() { document.getElementById('modalZoom').style.display = 'flex'; }
+        function cerrarZoom() { 
+            document.getElementById('modalZoom').style.display = 'none'; 
+            document.getElementById('imgZoomContainer').classList.remove('zoomed-in');
+        }
+        function hacerZoomDoble(e) { e.stopPropagation(); document.getElementById('imgZoomContainer').classList.toggle('zoomed-in'); }
+
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
+            } else {
+                audio.pause();
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                if(event.target.id === 'modalZoom') {
+                     document.getElementById('imgZoomContainer').classList.remove('zoomed-in');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
