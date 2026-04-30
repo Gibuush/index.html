@@ -207,36 +207,51 @@
             cursor: pointer;
         }
 
+        /* Estilos específicos para el Zoom Mejorado */
+        #modalZoom {
+            overflow: auto; /* Permite scroll si la imagen es grande */
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start; /* Alinea arriba para facilitar el scroll */
+            align-items: center;
+            padding-top: 60px;
+        }
+
         .cerrar-zoom-x {
-            position: absolute;
+            position: fixed; /* Fijo para que no se mueva al hacer scroll */
             top: 20px;
             right: 20px;
             width: 45px;
             height: 45px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 210;
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: 0.3s;
+            z-index: 220;
+            border: 1px solid rgba(255,255,255,0.4);
         }
-
-        .cerrar-zoom-x:hover { background: rgba(255, 255, 255, 0.4); }
 
         .cerrar-zoom-x svg { width: 22px; height: 22px; fill: white; }
 
         #imgZoomContainer {
-            max-width: 95vw;
-            max-height: 85vh;
-            border-radius: 4px;
+            width: 95%; /* Por defecto casi todo el ancho */
+            max-width: 1000px; /* Tamaño máximo en PC */
+            border-radius: 8px;
             transition: transform 0.3s ease;
             cursor: zoom-in;
+            margin-bottom: 50px;
         }
-        .zoomed-in { transform: scale(1.7); cursor: zoom-out !important; }
+
+        /* Clase de zoom activada */
+        #imgZoomContainer.zoomed-in {
+            width: 180%; /* Se expande más allá de la pantalla en móvil */
+            max-width: none;
+            transform: scale(1); /* Quitamos el transform scale para usar width real */
+            cursor: zoom-out;
+        }
 
         /* Música Flotante */
         .btn-musica-flotante {
@@ -261,7 +276,6 @@
 </head>
 <body>
 
-    <!-- Música en formato m4a con bucle infinito -->
     <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
 
     <div class="contenedor-principal" id="mainContainer">
@@ -278,10 +292,11 @@
         
         <div class="botones-container" id="botonesNavegacion">
             <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">⤷ Ceremonia Religiosa</button>
-            <button class="btn-invisible" onclick="abrirModal('modalCivil')">⤷ Civil y Recepción</button>
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')">⤷ Ceremonia Civil y Recepción</button>
         </div>
     </div>
 
+    <!-- Modales de información -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
@@ -294,13 +309,14 @@
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="4.jpeg" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Civil y Recepción</h2>
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
             <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
             <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
             <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
         </div>
     </div>
 
+    <!-- Modal de Zoom Mejorado -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -321,14 +337,23 @@
         const btnM = document.getElementById('btnMusic');
         const iconPlay = document.querySelector('.icon-play');
         const iconPause = document.querySelector('.icon-pause');
+        const imgZoom = document.getElementById('imgZoomContainer');
 
         let isOpen = false;
+
+        // Suavizar el bucle de la música
+        audio.addEventListener('timeupdate', function() {
+            var buffer = 0.5; // segundos antes del final para reiniciar
+            if(this.currentTime > this.duration - buffer){
+                this.currentTime = 0;
+                this.play();
+            }
+        });
 
         function abrirSobre() {
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
-                // El audio inicia tras la interacción del usuario
                 audio.play().catch(error => console.log("Autoplay bloqueado:", error));
                 btnM.style.display = 'flex';
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
@@ -336,12 +361,25 @@
             }
         }
 
-        function abrirZoom() { document.getElementById('modalZoom').style.display = 'flex'; }
+        function abrirZoom() { 
+            document.getElementById('modalZoom').style.display = 'flex'; 
+            document.body.style.overflow = 'hidden'; // Evita scroll de fondo
+        }
+
         function cerrarZoom() { 
             document.getElementById('modalZoom').style.display = 'none'; 
-            document.getElementById('imgZoomContainer').classList.remove('zoomed-in');
+            imgZoom.classList.remove('zoomed-in');
+            document.body.style.overflow = 'auto';
         }
-        function hacerZoomDoble(e) { e.stopPropagation(); document.getElementById('imgZoomContainer').classList.toggle('zoomed-in'); }
+
+        function hacerZoomDoble(e) { 
+            e.stopPropagation(); 
+            imgZoom.classList.toggle('zoomed-in');
+            // Si activamos zoom, llevamos el scroll al inicio de la imagen
+            if(imgZoom.classList.contains('zoomed-in')) {
+                document.getElementById('modalZoom').scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
 
         function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
         function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
@@ -360,9 +398,9 @@
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
+                cerrarModal(event.target.id);
                 if(event.target.id === 'modalZoom') {
-                     document.getElementById('imgZoomContainer').classList.remove('zoomed-in');
+                    imgZoom.classList.remove('zoomed-in');
                 }
             }
         }
