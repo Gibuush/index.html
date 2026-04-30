@@ -155,7 +155,6 @@
             .texto-clic { font-size: 2.2rem; }
         }
 
-        /* Modales */
         .modal {
             position: fixed;
             top: 0; left: 0;
@@ -207,18 +206,18 @@
             cursor: pointer;
         }
 
-        /* Estilos específicos para el Zoom Mejorado */
+        /* ZOOM CORREGIDO CON 2.JPEG */
         #modalZoom {
-            overflow: auto; /* Permite scroll si la imagen es grande */
+            overflow: auto; 
             display: none;
             flex-direction: column;
-            justify-content: flex-start; /* Alinea arriba para facilitar el scroll */
+            justify-content: flex-start;
             align-items: center;
-            padding-top: 60px;
+            padding: 60px 10px;
         }
 
         .cerrar-zoom-x {
-            position: fixed; /* Fijo para que no se mueva al hacer scroll */
+            position: fixed;
             top: 20px;
             right: 20px;
             width: 45px;
@@ -230,30 +229,28 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 220;
+            z-index: 300;
             border: 1px solid rgba(255,255,255,0.4);
         }
 
         .cerrar-zoom-x svg { width: 22px; height: 22px; fill: white; }
 
         #imgZoomContainer {
-            width: 95%; /* Por defecto casi todo el ancho */
-            max-width: 1000px; /* Tamaño máximo en PC */
+            width: 95%;
+            max-width: 1000px;
             border-radius: 8px;
-            transition: transform 0.3s ease;
+            transition: width 0.4s ease;
             cursor: zoom-in;
             margin-bottom: 50px;
+            display: block;
         }
 
-        /* Clase de zoom activada */
         #imgZoomContainer.zoomed-in {
-            width: 180%; /* Se expande más allá de la pantalla en móvil */
+            width: 180%;
             max-width: none;
-            transform: scale(1); /* Quitamos el transform scale para usar width real */
             cursor: zoom-out;
         }
 
-        /* Música Flotante */
         .btn-musica-flotante {
             position: fixed;
             bottom: 25px;
@@ -296,7 +293,7 @@
         </div>
     </div>
 
-    <!-- Modales de información -->
+    <!-- Modales -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
@@ -316,12 +313,11 @@
         </div>
     </div>
 
-    <!-- Modal de Zoom Mejorado -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </div>
-        <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+        <img src="2.jpeg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
@@ -341,9 +337,9 @@
 
         let isOpen = false;
 
-        // Suavizar el bucle de la música
+        // Bucle de música optimizado
         audio.addEventListener('timeupdate', function() {
-            var buffer = 0.5; // segundos antes del final para reiniciar
+            var buffer = 0.1; // Reinicio casi inmediato
             if(this.currentTime > this.duration - buffer){
                 this.currentTime = 0;
                 this.play();
@@ -363,7 +359,7 @@
 
         function abrirZoom() { 
             document.getElementById('modalZoom').style.display = 'flex'; 
-            document.body.style.overflow = 'hidden'; // Evita scroll de fondo
+            document.body.style.overflow = 'hidden'; 
         }
 
         function cerrarZoom() { 
@@ -375,7 +371,6 @@
         function hacerZoomDoble(e) { 
             e.stopPropagation(); 
             imgZoom.classList.toggle('zoomed-in');
-            // Si activamos zoom, llevamos el scroll al inicio de la imagen
             if(imgZoom.classList.contains('zoomed-in')) {
                 document.getElementById('modalZoom').scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -399,9 +394,6 @@
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 cerrarModal(event.target.id);
-                if(event.target.id === 'modalZoom') {
-                    imgZoom.classList.remove('zoomed-in');
-                }
             }
         }
     </script>
