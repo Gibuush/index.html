@@ -217,13 +217,13 @@
             cursor: pointer;
         }
 
+        /* --- MODAL DE ZOOM OPTIMIZADO PARA CENTRADO --- */
         #modalZoom {
-            overflow: auto;
+            overflow: auto; /* Permite scroll cuando hay zoom */
             display: none;
-            flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
-            padding-top: 60px;
+            background: rgba(0,0,0,0.98);
         }
 
         .cerrar-zoom-x {
@@ -232,33 +232,40 @@
             right: 20px;
             width: 45px;
             height: 45px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 220;
-            border: 1px solid rgba(255,255,255,0.4);
+            z-index: 250;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .cerrar-zoom-x svg { width: 22px; height: 22px; fill: white; }
-
         #imgZoomContainer {
-            width: 95%;
-            max-width: 1000px;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
+            width: auto;
+            height: auto;
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 5px;
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
             cursor: zoom-in;
-            margin-bottom: 50px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            object-fit: contain;
+            margin: auto; /* Ayuda al centrado en contenedores flex con scroll */
         }
 
         #imgZoomContainer.zoomed-in {
-            width: 180%;
-            max-width: none;
-            transform: scale(1);
+            transform: scale(2); /* Crece desde el centro */
             cursor: zoom-out;
+        }
+
+        /* Ajustes para móviles para que el zoom no se corte */
+        @media (max-width: 768px) {
+            #imgZoomContainer.zoomed-in {
+                transform: scale(1.8);
+            }
         }
 
         .btn-musica-flotante {
@@ -292,7 +299,6 @@
             <div class="lupa-zoom">
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M10 7v2H8v1h2v2h1v-2h2V9h-2V7h-1z"/></svg>
             </div>
-            <!-- CORREGIDO A 2.jpeg -->
             <img src="2.png" class="imagen-capa invitacion-interna" id="imgInvitacion">
         </div>
         
@@ -308,7 +314,15 @@
         </div>
     </div>
 
-    <!-- Modales -->
+    <!-- Modal Zoom -->
+    <div id="modalZoom" class="modal" onclick="cerrarZoom()">
+        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+        <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+    </div>
+
+    <!-- Otros Modales -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
@@ -328,14 +342,6 @@
         </div>
     </div>
 
-    <div id="modalZoom" class="modal" onclick="cerrarZoom()">
-        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
-            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </div>
-        <!-- CORREGIDO A 2 -->
-        <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
-    </div>
-
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
         <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -353,20 +359,12 @@
 
         let isOpen = false;
 
-        audio.addEventListener('timeupdate', function() {
-            var buffer = 0.4;
-            if(this.currentTime > this.duration - buffer){
-                this.currentTime = 0;
-                this.play();
-            }
-        });
-
         function abrirSobre() {
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
                 audio.play().catch(error => console.log("Audio interactivo"));
-                btnM.style.display = 'flex'; // ACTIVA EL BOTÓN DE MÚSICA
+                btnM.style.display = 'flex'; 
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
                 isOpen = true;
             }
@@ -385,8 +383,11 @@
         }
 
         function abrirZoom() { 
-            document.getElementById('modalZoom').style.display = 'flex'; 
+            const modal = document.getElementById('modalZoom');
+            modal.style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
+            // Reset zoom al abrir
+            imgZoom.classList.remove('zoomed-in');
         }
 
         function cerrarZoom() { 
@@ -398,6 +399,18 @@
         function hacerZoomDoble(e) { 
             e.stopPropagation(); 
             imgZoom.classList.toggle('zoomed-in');
+            
+            // Si hacemos zoom, centramos el scroll del modal
+            if(imgZoom.classList.contains('zoomed-in')) {
+                const modal = document.getElementById('modalZoom');
+                setTimeout(() => {
+                    modal.scrollTo({
+                        top: modal.scrollHeight / 4,
+                        left: modal.scrollWidth / 4,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
         }
 
         function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -405,7 +418,9 @@
         
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
-                cerrarModal(event.target.id);
+                const openModalId = event.target.id;
+                if(openModalId === 'modalZoom') cerrarZoom();
+                else cerrarModal(openModalId);
             }
         }
     </script>
