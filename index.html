@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- ETIQUETAS ANTI-CACHÉ (Obliga al teléfono a bajar los cambios nuevos) -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Boda Blanca y Manuel</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,13 +33,13 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* FONDO BORROSO */
+        /* FONDO BORROSO (Con cache busting ?v=1) */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image: url('3.jpg');
+            background-image: url('3.jpg?v=1');
             background-size: cover;
             background-position: center;
             filter: blur(12px) brightness(0.6); 
@@ -455,7 +461,8 @@
     <!-- CONTENEDOR DE PARTÍCULAS DE ORO -->
     <div id="particulas-container"></div>
 
-    <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
+    <!-- AUDIO CON VERSIÓN PARA EVITAR CACHÉ -->
+    <audio id="musica" src="SONG.m4a?v=1" loop preload="auto"></audio>
 
     <div class="contenedor-principal" id="mainContainer">
         <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
@@ -464,10 +471,11 @@
             <div class="lupa-zoom">
                 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/><path d="M10 7v2H8v1h2v2h1v-2h2V9h-2V7h-1z"/></svg>
             </div>
-            <img src="2.png" class="imagen-capa invitacion-interna" id="imgInvitacion">
+            <!-- IMÁGENES CON VERSIÓN PARA EVITAR CACHÉ -->
+            <img src="2.png?v=1" class="imagen-capa invitacion-interna" id="imgInvitacion">
         </div>
         
-        <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
+        <img src="1.png?v=1" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
         
         <div class="botones-container" id="botonesNavegacion">
             
@@ -497,23 +505,22 @@
                 <span class="texto-ola">⤷ Ceremonia Religiosa</span>
             </button>
             <button class="btn-invisible" onclick="abrirModal('modalCivil')">
-                <!-- Se cambió Recepción por Celebración -->
                 <span class="texto-ola">⤷ Ceremonia Civil y Celebración</span>
             </button>
         </div>
     </div>
 
-    <!-- Modales con Glassmorphism -->
+    <!-- Modales -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </div>
-        <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
+        <img src="2.png?v=1" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <img src="iglesia.png" class="img-modal">
+            <img src="iglesia.png?v=1" class="img-modal">
             <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Ceremonia Religiosa</h2>
             <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
             <button class="btn-regresar" onclick="cerrarModal('modalReligiosa')">Regresar</button>
@@ -522,8 +529,7 @@
 
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <img src="4.jpeg" class="img-modal">
-            <!-- Se cambió Recepción por Celebración -->
+            <img src="4.jpeg?v=1" class="img-modal">
             <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Civil y Celebración</h2>
             <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Celebración: 5:40 PM</p>
             <button class="btn-llegar" onclick="abrirMapas()" style="border:none; cursor:pointer; font-family: 'Poppins', sans-serif;">📍 Cómo llegar</button>
@@ -602,7 +608,7 @@
 
         function fadeInAudio(audioElement, duration) {
             audioElement.volume = 0;
-            audioElement.play();
+            audioElement.play().catch(error => console.log("Interacción requerida primero"));
             
             let startVolume = 0;
             let interval = 50;
@@ -695,26 +701,30 @@
             }
         }
 
+        // --- LÓGICA PARA FORZAR SIEMPRE GOOGLE MAPS ---
         function abrirMapas() {
-            // 1. Enlace web (SOLO se usará si lo abren en una computadora)
             const enlaceWeb = "https://maps.app.goo.gl/ufWkxgwqfRT2VhWT8";
-            
-            // 2. Tus coordenadas exactas en formato decimal (19°41'28.5"N 100°08'07.3"W)
             const latitud = "19.69125";
             const longitud = "-100.135361";
             const coordenadas = latitud + "," + longitud;
             
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Si es un iPhone / iPad (Abre mapas directo sin navegador)
+            // Si es iPhone o iPad (Busca específicamente la app instalada de Google Maps)
             if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location.href = "maps://?q=" + coordenadas;
+                window.location.href = "comgooglemaps://?q=" + coordenadas;
+                
+                // Si el usuario de Apple no tiene instalada la app de Google Maps, 
+                // esperamos medio segundo y lo mandamos a la versión web como respaldo.
+                setTimeout(() => {
+                    window.location.href = enlaceWeb;
+                }, 500);
             } 
-            // Si es un Android (Abre Google Maps directo sin navegador y pone la chincheta)
+            // Si es un Android (Obligamos a abrir el paquete oficial de Google Maps)
             else if (/android/i.test(userAgent)) {
-                window.location.href = "geo:" + coordenadas + "?q=" + coordenadas;
+                window.location.href = "intent://maps.google.com/maps?q=" + coordenadas + "#Intent;package=com.google.android.apps.maps;scheme=https;end;";
             } 
-            // Si es una PC, abre el navegador web normal con tu enlace corto
+            // Si es una Computadora
             else {
                 window.open(enlaceWeb, '_blank');
             }
