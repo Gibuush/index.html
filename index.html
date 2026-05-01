@@ -104,7 +104,6 @@
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
         .abierto .lupa-zoom { opacity: 1; }
 
-        /* Ahora el sobre se acomoda en su lugar y se desvanece suavemente */
         .abierto .sobre {
             opacity: 0;
             transform: scale(0.95);
@@ -138,7 +137,7 @@
             50% { transform: translate(-50%, -50%) scale(1.08); }
         }
 
-        /* --- NUEVO SISTEMA DE BOTONES FLUIDO --- */
+        /* --- CONTENEDOR FLUIDO AJUSTADO --- */
         .botones-container {
             display: flex; 
             flex-direction: column;
@@ -147,26 +146,70 @@
             z-index: 120;
             gap: 15px;
             
-            /* Estado oculto: aplastado, invisible y desplazado hacia abajo */
             max-height: 0;
             opacity: 0;
             margin-top: 0;
             overflow: hidden;
             transform: translateY(30px);
             
-            /* Esta transición hará que la imagen principal suba naturalmente */
             transition: max-height 1.5s ease-in-out, 
                         margin-top 1.5s ease-in-out, 
                         opacity 1.5s ease-in-out, 
                         transform 1.5s ease-in-out;
         }
 
-        /* Cuando se agrega esta clase, los botones crecen y empujan todo */
+        /* Se aumentó la altura máxima para que quepa el reloj */
         .mostrar-botones .botones-container {
-            max-height: 150px; 
+            max-height: 350px; 
             opacity: 1;
             margin-top: 25px;
             transform: translateY(0);
+        }
+
+        /* --- ESTILOS DEL CONTADOR --- */
+        .contador-boda {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .tiempo-restante {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .bloque-tiempo {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #cda87a;
+            border-radius: 10px;
+            padding: 8px 12px;
+            min-width: 60px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .bloque-tiempo span {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fff;
+            display: block;
+        }
+
+        .bloque-tiempo p {
+            margin: 0;
+            font-size: 0.7rem;
+            color: #cda87a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mensaje-hoy {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #cda87a;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            margin: 0;
+            animation: pulso-solido 2s ease-in-out infinite;
         }
 
         .btn-invisible {
@@ -324,7 +367,6 @@
 
     <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
 
-    <!-- Agregué el id al contenedor para manejar la segunda clase -->
     <div class="contenedor-principal" id="mainContainer">
         <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
         
@@ -337,7 +379,33 @@
         
         <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
         
+        <!-- Contenedor que agrupa el contador y los botones para que suban juntos -->
         <div class="botones-container" id="botonesNavegacion">
+            
+            <!-- EL NUEVO CONTADOR -->
+            <div class="contador-boda">
+                <div id="tiempoRestante" class="tiempo-restante">
+                    <div class="bloque-tiempo">
+                        <span id="dias">00</span>
+                        <p>Días</p>
+                    </div>
+                    <div class="bloque-tiempo">
+                        <span id="horas">00</span>
+                        <p>Hrs</p>
+                    </div>
+                    <div class="bloque-tiempo">
+                        <span id="minutos">00</span>
+                        <p>Min</p>
+                    </div>
+                    <div class="bloque-tiempo">
+                        <span id="segundos">00</span>
+                        <p>Seg</p>
+                    </div>
+                </div>
+                <!-- Mensaje que aparecerá cuando llegue la fecha -->
+                <h3 id="mensajeHoy" class="mensaje-hoy" style="display: none;">¡ES HOY!</h3>
+            </div>
+
             <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">
                 <span class="texto-ola">⤷ Ceremonia Religiosa</span>
             </button>
@@ -347,6 +415,7 @@
         </div>
     </div>
 
+    <!-- Modales (se mantienen igual) -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -389,6 +458,43 @@
 
         let isOpen = false;
 
+        // --- LÓGICA DEL CONTADOR DE LA BODA ---
+        // Se establece la fecha de la boda: 15 de agosto de 2026 a las 00:00 hrs
+        const fechaBoda = new Date('August 15, 2026 00:00:00').getTime();
+
+        function actualizarContador() {
+            const ahora = new Date().getTime();
+            const diferencia = fechaBoda - ahora;
+
+            const divTiempoRestante = document.getElementById('tiempoRestante');
+            const h3MensajeHoy = document.getElementById('mensajeHoy');
+
+            // Si la fecha ya llegó o pasó
+            if (diferencia <= 0) {
+                divTiempoRestante.style.display = 'none';
+                h3MensajeHoy.style.display = 'block';
+            } else {
+                // Cálculos de tiempo
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+                // Imprimir resultados con ceros a la izquierda (ej: "08" en vez de "8")
+                document.getElementById('dias').innerText = dias.toString().padStart(2, '0');
+                document.getElementById('horas').innerText = horas.toString().padStart(2, '0');
+                document.getElementById('minutos').innerText = minutos.toString().padStart(2, '0');
+                document.getElementById('segundos').innerText = segundos.toString().padStart(2, '0');
+            }
+        }
+
+        // Ejecutar el contador cada segundo
+        setInterval(actualizarContador, 1000);
+        // Llamarlo una vez al instante para evitar que se vea en "00" el primer segundo
+        actualizarContador();
+
+
+        // --- LÓGICA EXISTENTE DE LA INVITACIÓN ---
         function fadeInAudio(audioElement, duration) {
             audioElement.volume = 0;
             audioElement.play();
@@ -418,14 +524,11 @@
 
         function abrirSobre() {
             if (!isOpen) {
-                // 1. Inicia el desvanecimiento del sobre (dura 5s)
                 container.classList.add('abierto');
                 hint.style.display = 'none';
                 fadeInAudio(audio, 5000);
                 btnM.style.display = 'flex'; 
                 
-                // 2. A los 3.5 segundos, activamos la aparición de botones.
-                // Como el contenedor crece en altura, la imagen subirá sola suavemente.
                 setTimeout(() => { 
                     container.classList.add('mostrar-botones'); 
                 }, 3500); 
