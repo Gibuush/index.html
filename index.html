@@ -57,29 +57,29 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- SOBRE CON MOVIMIENTO RÍTMICO MUY LENTO --- */
+        /* --- ANIMACIÓN LENTA (VALSEADO) --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            animation: sobre-valseado 7s ease-in-out infinite;
+            /* 8 segundos para que sea extremadamente lenta */
+            animation: sobre-valseado-lento 8s ease-in-out infinite;
             transform-origin: bottom center;
         }
 
-        @keyframes sobre-valseado {
+        @keyframes sobre-valseado-lento {
             0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(0.7deg) scale(1.01); }
+            25% { transform: rotate(0.6deg) scale(1.01); }
             50% { transform: rotate(0deg) scale(1.02); }
-            75% { transform: rotate(-0.7deg) scale(1.01); }
+            75% { transform: rotate(-0.6deg) scale(1.01); }
         }
         
-        /* Contenedor de la invitación interna */
         #wrapperInvitacion {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 1; /* Por debajo del sobre inicialmente */
-            pointer-events: none; /* Bloqueado hasta que se abra */
+            z-index: 1; 
+            pointer-events: none;
         }
 
         .invitacion-interna {
@@ -87,7 +87,6 @@
             transform: scale(0.9);
         }
 
-        /* ESTADO ABIERTO */
         .abierto .sobre {
             opacity: 0;
             transform: translateY(-120px) scale(0.8);
@@ -101,11 +100,10 @@
         }
 
         .abierto #wrapperInvitacion {
-            pointer-events: auto; /* Permite tocar la invitación para el zoom */
-            z-index: 10; /* Pero se mantiene por debajo de los botones */
+            pointer-events: auto;
+            z-index: 10;
         }
 
-        /* TEXTO GUÍA */
         .texto-clic {
             position: absolute;
             top: 50%; left: 50%;
@@ -125,14 +123,13 @@
             50% { transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* BOTONES DE CEREMONIA */
         .botones-container {
             margin-top: 25px;
             display: none; 
             flex-direction: column;
             align-items: center;
             width: 100%;
-            z-index: 150; /* Z-INDEX ALTO PARA QUE FUNCIONEN LOS CLICS */
+            z-index: 150; 
             gap: 15px;
             position: relative;
         }
@@ -162,36 +159,36 @@
             100% { background-position: -200% center; }
         }
 
-        /* MODALES */
-        .modal {
+        /* BOTÓN DE CIERRE (X) MEJORADO */
+        .cerrar-zoom-x {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); 
-            display: none;
+            top: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.3); /* Círculo de fondo */
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 500;
-            padding: 20px;
+            cursor: pointer;
+            z-index: 1000; /* Siempre arriba de todo */
+            border: 2px solid rgba(255,255,255,0.5);
         }
 
-        .modal-content {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+        .cerrar-zoom-x svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
         }
 
-        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; }
-
-        /* ZOOM */
         #modalZoom {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98);
-            z-index: 600;
+            z-index: 900;
             justify-content: center;
             align-items: center;
             overflow: auto;
@@ -205,11 +202,10 @@
         }
 
         #imgZoomContainer.zoomed-in {
-            transform: scale(2);
+            transform: scale(2.2);
             cursor: zoom-out;
         }
 
-        /* BOTÓN MÚSICA */
         .btn-musica-flotante {
             position: fixed;
             bottom: 25px; right: 25px;
@@ -221,6 +217,26 @@
             justify-content: center; align-items: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             cursor: pointer;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1200;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
         }
     </style>
 </head>
@@ -247,12 +263,15 @@
         </div>
     </div>
 
-    <!-- MODAL ZOOM -->
-    <div id="modalZoom" onclick="cerrarZoom()">
+    <!-- MODAL ZOOM CON X VISIBLE -->
+    <div id="modalZoom">
+        <div class="cerrar-zoom-x" onclick="cerrarZoom()">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
         <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
-    <!-- MODAL RELIGIOSA -->
+    <!-- MODALES DE INFORMACIÓN -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
@@ -262,7 +281,6 @@
         </div>
     </div>
 
-    <!-- MODAL CIVIL -->
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="4.jpeg" class="img-modal">
@@ -273,7 +291,6 @@
         </div>
     </div>
 
-    <!-- BOTÓN MÚSICA -->
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
         <span id="musicIcon" style="color:#cda87a; font-weight:bold; font-size: 1.2rem;">||</span>
     </button>
@@ -288,17 +305,13 @@
 
         function fadeInAudio(duration) {
             audio.volume = 0;
-            audio.play().catch(e => console.log("Error play audio:", e));
+            audio.play().catch(e => console.log("Audio play blocked"));
             let vol = 0;
             let interval = 50;
             let step = interval / duration;
             let fade = setInterval(() => {
-                if (vol < 1) {
-                    vol += step;
-                    audio.volume = Math.min(vol, 1);
-                } else {
-                    clearInterval(fade);
-                }
+                if (vol < 1) { vol += step; audio.volume = Math.min(vol, 1); }
+                else { clearInterval(fade); }
             }, interval);
         }
 
@@ -308,21 +321,14 @@
                 document.getElementById('hintText').style.display = 'none';
                 fadeInAudio(5000); 
                 btnM.style.display = 'flex';
-                setTimeout(() => {
-                    btnsNav.style.display = 'flex';
-                }, 600);
+                setTimeout(() => { btnsNav.style.display = 'flex'; }, 600);
                 isOpen = true;
             }
         }
 
         function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                document.getElementById('musicIcon').innerText = '||';
-            } else {
-                audio.pause();
-                document.getElementById('musicIcon').innerText = '▶';
-            }
+            if (audio.paused) { audio.play(); document.getElementById('musicIcon').innerText = '||'; }
+            else { audio.pause(); document.getElementById('musicIcon').innerText = '▶'; }
         }
 
         function abrirZoom() { 
@@ -341,26 +347,14 @@
             imgZoom.classList.toggle('zoomed-in');
         }
 
-        function abrirModal(id) { 
-            document.getElementById(id).style.display = 'flex'; 
-        }
-
-        function cerrarModal(id) { 
-            document.getElementById(id).style.display = 'none'; 
-        }
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 cerrarModal(event.target.id);
             }
         }
-
-        audio.addEventListener('timeupdate', function() {
-            if(this.currentTime > this.duration - 0.4){
-                this.currentTime = 0;
-                this.play();
-            }
-        });
     </script>
 </body>
 </html>
