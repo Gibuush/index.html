@@ -27,6 +27,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* FONDO BORROSO */
         body::before {
             content: "";
             position: fixed;
@@ -39,45 +40,60 @@
             z-index: -1;
         }
 
-        /* --- 1. PANTALLA DE CARGA (PRELOADER) --- */
-        #preloader {
+        /* VIÑETA / OSCURECIMIENTO EN LOS BORDES */
+        body::after {
+            content: "";
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background-color: #050505;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease-out, visibility 1s ease-out;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none; 
+            z-index: 2; 
         }
 
-        .iniciales-preloader {
-            font-family: 'Dancing Script', cursive;
-            font-size: 5rem;
-            color: #cda87a;
-            margin: 0;
-            text-shadow: 0 0 25px rgba(205,168,122,0.6);
-            animation: latido-preloader 1.5s infinite alternate ease-in-out;
+        /* --- NIEBLA / HUMO --- */
+        .capa-niebla {
+            position: fixed;
+            bottom: -20vh;
+            left: -50vw;
+            width: 200vw;
+            height: 80vh;
+            background: radial-gradient(ellipse at center, rgba(205, 168, 122, 0.15) 0%, rgba(0, 0, 0, 0) 60%);
+            filter: blur(30px);
+            z-index: 1;
+            pointer-events: none;
+            animation: niebla-movimiento 15s infinite alternate ease-in-out;
         }
 
-        @keyframes latido-preloader {
-            0% { transform: scale(0.9); opacity: 0.7; }
-            100% { transform: scale(1.1); opacity: 1; }
+        .capa-niebla-2 {
+            position: fixed;
+            bottom: -10vh;
+            right: -30vw;
+            width: 150vw;
+            height: 60vh;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 65%);
+            filter: blur(20px);
+            z-index: 1;
+            pointer-events: none;
+            animation: niebla-movimiento-2 20s infinite alternate ease-in-out;
         }
 
-        /* Clase que se agrega cuando carga la página */
-        body.cargado #preloader {
-            opacity: 0;
-            visibility: hidden;
+        @keyframes niebla-movimiento {
+            0% { transform: translateX(0) translateY(0) scale(1); }
+            100% { transform: translateX(10%) translateY(-5%) scale(1.1); }
         }
 
-        /* --- 2. PARTÍCULAS DE POLVO DE ORO --- */
+        @keyframes niebla-movimiento-2 {
+            0% { transform: translateX(0) scale(1.1); }
+            100% { transform: translateX(-15%) scale(1); }
+        }
+
+        /* --- PARTÍCULAS DE POLVO DE ORO --- */
         #particulas-container {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
             overflow: hidden;
         }
@@ -311,12 +327,12 @@
             padding: 20px;
         }
 
-        /* --- 3. GLASSMORPHISM EN LOS MODALES --- */
+        /* GLASSMORPHISM EN LOS MODALES */
         .modal-content {
-            background: rgba(20, 20, 20, 0.65); /* Fondo oscuro semitransparente */
-            backdrop-filter: blur(15px); /* Efecto cristal esmerilado */
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(205, 168, 122, 0.3); /* Borde fino dorado */
+            border: 1px solid rgba(205, 168, 122, 0.3);
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             padding: 25px;
             border-radius: 20px;
@@ -329,7 +345,7 @@
         }
 
         .modal-content p {
-            color: #eaeaea; /* Texto claro para que contraste */
+            color: #eaeaea; 
             text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
         }
 
@@ -353,7 +369,7 @@
         .btn-regresar {
             background: none;
             border: none;
-            color: #cda87a; /* Color oro en vez de oscuro */
+            color: #cda87a; 
             font-family: 'Dancing Script', cursive;
             font-size: 1.8rem;
             margin-top: 5px;
@@ -432,10 +448,9 @@
 </head>
 <body>
 
-    <!-- PRELOADER -->
-    <div id="preloader">
-        <h1 class="iniciales-preloader">B & M</h1>
-    </div>
+    <!-- NIEBLA DE FONDO -->
+    <div class="capa-niebla"></div>
+    <div class="capa-niebla-2"></div>
 
     <!-- CONTENEDOR DE PARTÍCULAS DE ORO -->
     <div id="particulas-container"></div>
@@ -482,7 +497,8 @@
                 <span class="texto-ola">⤷ Ceremonia Religiosa</span>
             </button>
             <button class="btn-invisible" onclick="abrirModal('modalCivil')">
-                <span class="texto-ola">⤷ Ceremonia CiviCeremonia Civil y Celebración</span>
+                <!-- Se cambió Recepción por Celebración -->
+                <span class="texto-ola">⤷ Ceremonia Civil y Celebración</span>
             </button>
         </div>
     </div>
@@ -507,8 +523,9 @@
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="4.jpeg" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">CiviCeremonia Civil y Celebración</h2>
-            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
+            <!-- Se cambió Recepción por Celebración -->
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Civil y Celebración</h2>
+            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Celebración: 5:40 PM</p>
             <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
             <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
         </div>
@@ -520,13 +537,6 @@
     </button>
 
     <script>
-        // --- QUITAR PRELOADER CUANDO CARGUE LA PÁGINA ---
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.body.classList.add('cargado');
-            }, 800); // 800ms de retraso para que se aprecie el efecto
-        });
-
         // --- CREAR PARTÍCULAS DE ORO ---
         function crearParticulas() {
             const contenedor = document.getElementById('particulas-container');
@@ -535,22 +545,22 @@
                 let particula = document.createElement('div');
                 particula.classList.add('particula');
                 
-                let size = Math.random() * 4 + 1; // Tamaño entre 1px y 5px
+                let size = Math.random() * 4 + 1; 
                 particula.style.width = `${size}px`;
                 particula.style.height = `${size}px`;
                 
-                particula.style.left = `${Math.random() * 100}vw`; // Posición horizontal aleatoria
+                particula.style.left = `${Math.random() * 100}vw`; 
                 
-                let duration = Math.random() * 10 + 5; // Velocidad de subida
+                let duration = Math.random() * 10 + 5; 
                 particula.style.animationDuration = `${duration}s`;
                 
-                let delay = Math.random() * 5; // Retraso de inicio
+                let delay = Math.random() * 5; 
                 particula.style.animationDelay = `${delay}s`;
                 
                 contenedor.appendChild(particula);
             }
         }
-        crearParticulas(); // Inicializar las partículas
+        crearParticulas(); 
 
         const container = document.getElementById('mainContainer');
         const audio = document.getElementById('musica');
@@ -621,6 +631,7 @@
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
+                
                 fadeInAudio(audio, 5000);
                 btnM.style.display = 'flex'; 
                 
