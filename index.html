@@ -57,21 +57,21 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- ANIMACIÓN DEL SOBRE AL RITMO DE LA MÚSICA --- */
+        /* --- SOBRE SINCRONIZADO A 5 SEGUNDOS --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            /* Animación suave: 4 segundos para un ciclo completo */
-            animation: sobre-ritmo 4s ease-in-out infinite;
+            /* Duración de 5s igual que el fade de la música */
+            animation: sobre-ritmo 5s ease-in-out infinite;
             transform-origin: bottom center;
         }
 
         @keyframes sobre-ritmo {
             0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(1.5deg) scale(1.02); }
+            25% { transform: rotate(1.2deg) scale(1.015); }
             50% { transform: rotate(0deg) scale(1); }
-            75% { transform: rotate(-1.5deg) scale(1.02); }
+            75% { transform: rotate(-1.2deg) scale(1.015); }
         }
         
         #wrapperInvitacion {
@@ -106,7 +106,6 @@
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
         .abierto .lupa-zoom { opacity: 1; }
 
-        /* Cuando se abre el sobre, quitamos la animación de balanceo */
         .abierto .sobre {
             opacity: 0;
             transform: translateY(-120px) scale(0.8);
@@ -362,8 +361,8 @@
         const btnNav = document.getElementById('botonesNavegacion');
         const hint = document.getElementById('hintText');
         const btnM = document.getElementById('btnMusic');
-        const iconPlay = document.querySelector('.icon-play');
         const iconPause = document.querySelector('.icon-pause');
+        const iconPlay = document.querySelector('.icon-play');
         const imgZoom = document.getElementById('imgZoomContainer');
 
         let isOpen = false;
@@ -399,7 +398,7 @@
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
-                fadeInAudio(audio, 5000);
+                fadeInAudio(audio, 5000); // 5 segundos de entrada
                 btnM.style.display = 'flex'; 
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
                 isOpen = true;
