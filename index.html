@@ -701,32 +701,26 @@
             }
         }
 
-        // --- LÓGICA PARA FORZAR SIEMPRE GOOGLE MAPS ---
+        // --- LÓGICA CORREGIDA PARA FORZAR GOOGLE MAPS ---
         function abrirMapas() {
-            const enlaceWeb = "https://maps.app.goo.gl/ufWkxgwqfRT2VhWT8";
             const latitud = "19.69125";
             const longitud = "-100.135361";
             const coordenadas = latitud + "," + longitud;
             
+            // Enlace Universal de Google Maps (Manejado nativamente por los celulares)
+            const enlaceUniversal = "https://www.google.com/maps/search/?api=1&query=" + coordenadas;
+            
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Si es iPhone o iPad (Busca específicamente la app instalada de Google Maps)
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.location.href = "comgooglemaps://?q=" + coordenadas;
-                
-                // Si el usuario de Apple no tiene instalada la app de Google Maps, 
-                // esperamos medio segundo y lo mandamos a la versión web como respaldo.
-                setTimeout(() => {
-                    window.location.href = enlaceWeb;
-                }, 500);
-            } 
-            // Si es un Android (Obligamos a abrir el paquete oficial de Google Maps)
-            else if (/android/i.test(userAgent)) {
+            if (/android/i.test(userAgent)) {
+                // En Android: Obligamos a abrir el paquete oficial de Google Maps de inmediato
                 window.location.href = "intent://maps.google.com/maps?q=" + coordenadas + "#Intent;package=com.google.android.apps.maps;scheme=https;end;";
             } 
-            // Si es una Computadora
             else {
-                window.open(enlaceWeb, '_blank');
+                // En iPhone, iPad o PC: Usamos el enlace Universal.
+                // iOS es muy inteligente con este enlace: si tienen Google Maps, lo abre directo.
+                // Si no lo tienen, abre el navegador sin marcar errores extraños.
+                window.location.href = enlaceUniversal;
             }
         }
     </script>
