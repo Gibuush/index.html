@@ -39,6 +39,65 @@
             z-index: -1;
         }
 
+        /* --- 1. PANTALLA DE CARGA (PRELOADER) --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background-color: #050505;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+        }
+
+        .iniciales-preloader {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: #cda87a;
+            margin: 0;
+            text-shadow: 0 0 25px rgba(205,168,122,0.6);
+            animation: latido-preloader 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes latido-preloader {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Clase que se agrega cuando carga la página */
+        body.cargado #preloader {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- 2. PARTÍCULAS DE POLVO DE ORO --- */
+        #particulas-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particula {
+            position: absolute;
+            background-color: #cda87a;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 10px 2px rgba(205, 168, 122, 0.4);
+            animation: flotar linear infinite;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(110vh) scale(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
         .contenedor-principal {
             position: relative;
             width: 90%;
@@ -47,6 +106,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            z-index: 10;
         }
 
         .imagen-capa {
@@ -57,19 +117,17 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- NUEVA ANIMACIÓN DE PULSACIÓN PARA EL SOBRE --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            /* Se aplica la nueva animación de pulso */
             animation: pulso-sobre 2s ease-in-out infinite;
             transform-origin: center center;
         }
 
         @keyframes pulso-sobre {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); } /* Crece un 3% suavemente */
+            50% { transform: scale(1.03); } 
         }
         
         #wrapperInvitacion {
@@ -164,7 +222,6 @@
             transform: translateY(0);
         }
 
-        /* --- ESTILOS DEL CONTADOR --- */
         .contador-boda {
             width: 100%;
             margin-bottom: 5px;
@@ -184,6 +241,7 @@
             min-width: 60px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .bloque-tiempo span {
@@ -245,7 +303,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); 
+            background: rgba(0,0,0,0.85); 
             display: none;
             justify-content: center;
             align-items: center;
@@ -253,8 +311,13 @@
             padding: 20px;
         }
 
+        /* --- 3. GLASSMORPHISM EN LOS MODALES --- */
         .modal-content {
-            background: white;
+            background: rgba(20, 20, 20, 0.65); /* Fondo oscuro semitransparente */
+            backdrop-filter: blur(15px); /* Efecto cristal esmerilado */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(205, 168, 122, 0.3); /* Borde fino dorado */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             padding: 25px;
             border-radius: 20px;
             width: 100%;
@@ -265,7 +328,12 @@
             align-items: center;
         }
 
-        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; }
+        .modal-content p {
+            color: #eaeaea; /* Texto claro para que contraste */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
 
         .btn-llegar {
             display: block;
@@ -277,7 +345,7 @@
             text-decoration: none;
             font-weight: 600;
             margin: 10px 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             transition: background 0.3s;
             font-size: 0.95rem;
         }
@@ -285,11 +353,12 @@
         .btn-regresar {
             background: none;
             border: none;
-            color: #4a3728;
+            color: #cda87a; /* Color oro en vez de oscuro */
             font-family: 'Dancing Script', cursive;
             font-size: 1.8rem;
             margin-top: 5px;
             cursor: pointer;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
         }
 
         #modalZoom {
@@ -363,6 +432,14 @@
 </head>
 <body>
 
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <h1 class="iniciales-preloader">B & M</h1>
+    </div>
+
+    <!-- CONTENEDOR DE PARTÍCULAS DE ORO -->
+    <div id="particulas-container"></div>
+
     <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
 
     <div class="contenedor-principal" id="mainContainer">
@@ -410,6 +487,7 @@
         </div>
     </div>
 
+    <!-- Modales con Glassmorphism -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -420,7 +498,7 @@
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Religiosa</h2>
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Ceremonia Religiosa</h2>
             <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
             <button class="btn-regresar" onclick="cerrarModal('modalReligiosa')">Regresar</button>
         </div>
@@ -429,7 +507,7 @@
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="4.jpeg" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Civil y Recepción</h2>
             <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
             <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
             <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
@@ -442,6 +520,38 @@
     </button>
 
     <script>
+        // --- QUITAR PRELOADER CUANDO CARGUE LA PÁGINA ---
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.body.classList.add('cargado');
+            }, 800); // 800ms de retraso para que se aprecie el efecto
+        });
+
+        // --- CREAR PARTÍCULAS DE ORO ---
+        function crearParticulas() {
+            const contenedor = document.getElementById('particulas-container');
+            const cantidad = 40; 
+            for (let i = 0; i < cantidad; i++) {
+                let particula = document.createElement('div');
+                particula.classList.add('particula');
+                
+                let size = Math.random() * 4 + 1; // Tamaño entre 1px y 5px
+                particula.style.width = `${size}px`;
+                particula.style.height = `${size}px`;
+                
+                particula.style.left = `${Math.random() * 100}vw`; // Posición horizontal aleatoria
+                
+                let duration = Math.random() * 10 + 5; // Velocidad de subida
+                particula.style.animationDuration = `${duration}s`;
+                
+                let delay = Math.random() * 5; // Retraso de inicio
+                particula.style.animationDelay = `${delay}s`;
+                
+                contenedor.appendChild(particula);
+            }
+        }
+        crearParticulas(); // Inicializar las partículas
+
         const container = document.getElementById('mainContainer');
         const audio = document.getElementById('musica');
         const hint = document.getElementById('hintText');
