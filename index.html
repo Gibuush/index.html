@@ -57,10 +57,21 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* --- ANIMACIÓN DEL SOBRE AL RITMO DE LA MÚSICA --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
+            /* Animación suave: 4 segundos para un ciclo completo */
+            animation: sobre-ritmo 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sobre-ritmo {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(1.5deg) scale(1.02); }
+            50% { transform: rotate(0deg) scale(1); }
+            75% { transform: rotate(-1.5deg) scale(1.02); }
         }
         
         #wrapperInvitacion {
@@ -95,10 +106,12 @@
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
         .abierto .lupa-zoom { opacity: 1; }
 
+        /* Cuando se abre el sobre, quitamos la animación de balanceo */
         .abierto .sobre {
             opacity: 0;
             transform: translateY(-120px) scale(0.8);
             pointer-events: none; 
+            animation: none; 
         }
 
         .abierto .invitacion-interna {
@@ -355,14 +368,13 @@
 
         let isOpen = false;
 
-        // Función para subir el volumen gradualmente (Fade In)
         function fadeInAudio(audioElement, duration) {
-            audioElement.volume = 0; // Empezamos en silencio
+            audioElement.volume = 0;
             audioElement.play();
             
             let startVolume = 0;
-            let interval = 50; // Cada 50ms subimos un poco
-            let step = interval / duration; // Cuánto subir en cada paso
+            let interval = 50;
+            let step = interval / duration;
 
             let fade = setInterval(() => {
                 if (startVolume < 1) {
@@ -387,10 +399,7 @@
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
-                
-                // Aplicamos el Fade In de 5 segundos (5000ms)
                 fadeInAudio(audio, 5000);
-                
                 btnM.style.display = 'flex'; 
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
                 isOpen = true;
