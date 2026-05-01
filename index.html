@@ -27,7 +27,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Imagen de fondo desenfocada */
+        /* Fondo con imagen desenfocada */
         body::before {
             content: "";
             position: fixed;
@@ -58,20 +58,22 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Sobre con animación sincronizada de 5s */
+        /* --- ANIMACIÓN DEL SOBRE: BALANCEO LENTO Y RÍTMICO --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            animation: sobre-ritmo 5s ease-in-out infinite;
+            /* 6 segundos para un vaivén muy pausado */
+            animation: sobre-ritmo-lento 6s ease-in-out infinite;
             transform-origin: bottom center;
+            will-change: transform;
         }
 
-        @keyframes sobre-ritmo {
+        @keyframes sobre-ritmo-lento {
             0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(1.2deg) scale(1.015); }
-            50% { transform: rotate(0deg) scale(1); }
-            75% { transform: rotate(-1.2deg) scale(1.015); }
+            25% { transform: rotate(0.8deg) scale(1.01); }
+            50% { transform: rotate(0deg) scale(1.02); }
+            75% { transform: rotate(-0.8deg) scale(1.01); }
         }
         
         #wrapperInvitacion {
@@ -86,7 +88,7 @@
             transform: scale(0.9);
         }
 
-        /* Estado Abierto */
+        /* Efecto al abrir */
         .abierto .sobre {
             opacity: 0;
             transform: translateY(-120px) scale(0.8);
@@ -99,7 +101,7 @@
             transform: scale(1);
         }
 
-        /* Texto inicial con pulso */
+        /* Texto de instrucción con pulso sólido */
         .texto-clic {
             position: absolute;
             top: 50%; left: 50%;
@@ -111,15 +113,15 @@
             width: 100%;
             color: #fff;
             text-shadow: 2px 2px 12px rgba(0,0,0,0.8);
-            animation: pulso-solido 2s ease-in-out infinite;
+            animation: pulso-solido 3s ease-in-out infinite;
         }
 
         @keyframes pulso-solido {
             0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.08); }
+            50% { transform: translate(-50%, -50%) scale(1.06); }
         }
 
-        /* Botones finales */
+        /* Contenedor de botones (Ceremonias) */
         .botones-container {
             margin-top: 25px;
             display: none; 
@@ -128,6 +130,15 @@
             width: 100%;
             z-index: 120;
             gap: 15px;
+        }
+
+        .btn-invisible {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .texto-ola {
@@ -147,7 +158,7 @@
             100% { background-position: -200% center; }
         }
 
-        /* Zoom y Modales */
+        /* Modal de Zoom mejorado */
         #modalZoom {
             display: none;
             position: fixed;
@@ -162,8 +173,11 @@
         #imgZoomContainer {
             max-width: 90%;
             max-height: 85vh;
-            transition: transform 0.4s ease;
+            border-radius: 5px;
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
             cursor: zoom-in;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin: auto;
         }
 
         #imgZoomContainer.zoomed-in {
@@ -171,17 +185,49 @@
             cursor: zoom-out;
         }
 
+        @media (max-width: 768px) {
+            #imgZoomContainer.zoomed-in { transform: scale(1.8); }
+            .texto-clic { font-size: 2.2rem; }
+        }
+
+        /* Botón de música */
         .btn-musica-flotante {
             position: fixed;
             bottom: 25px; right: 25px;
-            background: white; border-radius: 50%;
+            background: white;
+            border-radius: 50%;
             width: 55px; height: 55px;
             border: 2px solid #cda87a;
             z-index: 150;
-            display: none;
-            justify-content: center; align-items: center;
+            cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
+
+        /* Modales de información */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); 
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .img-modal { width: 100%; border-radius: 10px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -192,16 +238,16 @@
         <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
         
         <div id="wrapperInvitacion" onclick="abrirZoom()">
-            <img src="2.png" class="imagen-capa invitacion-interna">
+            <img src="2.png" class="imagen-capa invitacion-interna" id="imgInvitacion">
         </div>
         
         <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
         
         <div class="botones-container" id="botonesNavegacion">
-            <button style="background:none; border:none; cursor:pointer;" onclick="abrirModal('modalReligiosa')">
+            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')">
                 <span class="texto-ola">⤷ Ceremonia Religiosa</span>
             </button>
-            <button style="background:none; border:none; cursor:pointer;" onclick="abrirModal('modalCivil')">
+            <button class="btn-invisible" onclick="abrirModal('modalCivil')">
                 <span class="texto-ola">⤷ Ceremonia Civil y Recepción</span>
             </button>
         </div>
@@ -212,9 +258,30 @@
         <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
+    <!-- Modal Religiosa -->
+    <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="iglesia.png" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a;">Ceremonia Religiosa</h2>
+            <p>Templo de la Inmaculada Concepción<br>Angangueo, Michoacán | 1:00 PM</p>
+            <button onclick="cerrarModal('modalReligiosa')" style="background:none; border:none; color:#4a3728; font-family:'Dancing Script'; font-size:1.8rem; cursor:pointer;">Regresar</button>
+        </div>
+    </div>
+
+    <!-- Modal Civil -->
+    <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img src="4.jpeg" class="img-modal">
+            <h2 style="font-family:'Dancing Script'; color:#cda87a;">Civil y Recepción</h2>
+            <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
+            <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" style="display:block; background:#cda87a; color:white; padding:10px; border-radius:20px; text-decoration:none; margin:10px 0;">📍 Cómo llegar</a>
+            <button onclick="cerrarModal('modalCivil')" style="background:none; border:none; color:#4a3728; font-family:'Dancing Script'; font-size:1.8rem; cursor:pointer;">Regresar</button>
+        </div>
+    </div>
+
     <!-- Botón Música -->
     <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">
-        <span id="musicIcon" style="color:#cda87a; font-weight:bold;">||</span>
+        <span id="musicIcon" style="color:#cda87a; font-weight:bold; font-size: 1.2rem;">||</span>
     </button>
 
     <script>
@@ -222,7 +289,9 @@
         const container = document.getElementById('mainContainer');
         const btnM = document.getElementById('btnMusic');
         const imgZoom = document.getElementById('imgZoomContainer');
+        let isOpen = false;
 
+        // Función Fade-in sincronizada (5 segundos)
         function fadeInAudio(duration) {
             audio.volume = 0;
             audio.play();
@@ -230,29 +299,64 @@
             let interval = 50;
             let step = interval / duration;
             let fade = setInterval(() => {
-                if (vol < 1) { vol += step; audio.volume = Math.min(vol, 1); }
-                else { clearInterval(fade); }
+                if (vol < 1) {
+                    vol += step;
+                    audio.volume = Math.min(vol, 1);
+                } else {
+                    clearInterval(fade);
+                }
             }, interval);
         }
 
         function abrirSobre() {
-            container.classList.add('abierto');
-            document.getElementById('hintText').style.display = 'none';
-            fadeInAudio(5000);
-            btnM.style.display = 'flex';
-            setTimeout(() => { document.getElementById('botonesNavegacion').style.display = 'flex'; }, 600);
+            if (!isOpen) {
+                container.classList.add('abierto');
+                document.getElementById('hintText').style.display = 'none';
+                fadeInAudio(5000); // Sincronizado con la animación visual
+                btnM.style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('botonesNavegacion').style.display = 'flex';
+                }, 600);
+                isOpen = true;
+            }
         }
 
         function toggleMusic() {
-            if (audio.paused) { audio.play(); document.getElementById('musicIcon').innerText = '||'; }
-            else { audio.pause(); document.getElementById('musicIcon').innerText = '▶'; }
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('musicIcon').innerText = '||';
+            } else {
+                audio.pause();
+                document.getElementById('musicIcon').innerText = '▶';
+            }
         }
 
-        function abrirZoom() { document.getElementById('modalZoom').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        function cerrarZoom() { document.getElementById('modalZoom').style.display = 'none'; document.body.style.overflow = 'auto'; imgZoom.classList.remove('zoomed-in'); }
-        function hacerZoomDoble(e) { e.stopPropagation(); imgZoom.classList.toggle('zoomed-in'); }
+        function abrirZoom() { 
+            document.getElementById('modalZoom').style.display = 'flex'; 
+            document.body.style.overflow = 'hidden'; 
+        }
 
-        // Aquí puedes añadir las funciones abrirModal('modalReligiosa'), etc.
+        function cerrarZoom() { 
+            document.getElementById('modalZoom').style.display = 'none'; 
+            document.body.style.overflow = 'auto';
+            imgZoom.classList.remove('zoomed-in');
+        }
+
+        function hacerZoomDoble(e) { 
+            e.stopPropagation(); 
+            imgZoom.classList.toggle('zoomed-in');
+        }
+
+        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Bucle de música optimizado
+        audio.addEventListener('timeupdate', function() {
+            if(this.currentTime > this.duration - 0.4){
+                this.currentTime = 0;
+                this.play();
+            }
+        });
     </script>
 </body>
 </html>
