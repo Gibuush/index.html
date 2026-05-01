@@ -57,12 +57,10 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- ANIMACIÓN DEL SOBRE AL RITMO DE LA MÚSICA --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            /* Animación suave: 4 segundos para un ciclo completo */
             animation: sobre-ritmo 4s ease-in-out infinite;
             transform-origin: bottom center;
         }
@@ -106,16 +104,15 @@
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
         .abierto .lupa-zoom { opacity: 1; }
 
-        /* Cuando se abre el sobre, quitamos la animación de balanceo y sincronizamos a 5s */
+        /* Ahora el sobre se acomoda en su lugar y se desvanece suavemente */
         .abierto .sobre {
             opacity: 0;
-            transform: translateY(-120px) scale(0.8);
+            transform: scale(0.95);
             pointer-events: none; 
             animation: none; 
             transition: all 5s ease-in-out;
         }
 
-        /* La invitación también toma 5s en aparecer completamente */
         .abierto .invitacion-interna {
             opacity: 1;
             transform: scale(1);
@@ -141,14 +138,35 @@
             50% { transform: translate(-50%, -50%) scale(1.08); }
         }
 
+        /* --- NUEVO SISTEMA DE BOTONES FLUIDO --- */
         .botones-container {
-            margin-top: 25px;
-            display: none; 
+            display: flex; 
             flex-direction: column;
             align-items: center;
             width: 100%;
             z-index: 120;
             gap: 15px;
+            
+            /* Estado oculto: aplastado, invisible y desplazado hacia abajo */
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            overflow: hidden;
+            transform: translateY(30px);
+            
+            /* Esta transición hará que la imagen principal suba naturalmente */
+            transition: max-height 1.5s ease-in-out, 
+                        margin-top 1.5s ease-in-out, 
+                        opacity 1.5s ease-in-out, 
+                        transform 1.5s ease-in-out;
+        }
+
+        /* Cuando se agrega esta clase, los botones crecen y empujan todo */
+        .mostrar-botones .botones-container {
+            max-height: 150px; 
+            opacity: 1;
+            margin-top: 25px;
+            transform: translateY(0);
         }
 
         .btn-invisible {
@@ -306,6 +324,7 @@
 
     <audio id="musica" src="SONG.m4a" loop preload="auto"></audio>
 
+    <!-- Agregué el id al contenedor para manejar la segunda clase -->
     <div class="contenedor-principal" id="mainContainer">
         <div class="texto-clic" id="hintText">¡Toca para abrir!</div>
         
@@ -362,7 +381,6 @@
     <script>
         const container = document.getElementById('mainContainer');
         const audio = document.getElementById('musica');
-        const btnNav = document.getElementById('botonesNavegacion');
         const hint = document.getElementById('hintText');
         const btnM = document.getElementById('btnMusic');
         const iconPlay = document.querySelector('.icon-play');
@@ -400,13 +418,18 @@
 
         function abrirSobre() {
             if (!isOpen) {
+                // 1. Inicia el desvanecimiento del sobre (dura 5s)
                 container.classList.add('abierto');
                 hint.style.display = 'none';
                 fadeInAudio(audio, 5000);
                 btnM.style.display = 'flex'; 
                 
-                // Se cambió el tiempo de 600 a 5000 para que los botones aparezcan al finalizar el fade
-                setTimeout(() => { btnNav.style.display = 'flex'; }, 5000);
+                // 2. A los 3.5 segundos, activamos la aparición de botones.
+                // Como el contenedor crece en altura, la imagen subirá sola suavemente.
+                setTimeout(() => { 
+                    container.classList.add('mostrar-botones'); 
+                }, 3500); 
+                
                 isOpen = true;
             }
         }
