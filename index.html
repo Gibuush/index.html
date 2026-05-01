@@ -106,17 +106,20 @@
         .lupa-zoom svg { width: 20px; height: 20px; fill: white; }
         .abierto .lupa-zoom { opacity: 1; }
 
-        /* Cuando se abre el sobre, quitamos la animación de balanceo */
+        /* Cuando se abre el sobre, quitamos la animación de balanceo y sincronizamos a 5s */
         .abierto .sobre {
             opacity: 0;
             transform: translateY(-120px) scale(0.8);
             pointer-events: none; 
             animation: none; 
+            transition: all 5s ease-in-out;
         }
 
+        /* La invitación también toma 5s en aparecer completamente */
         .abierto .invitacion-interna {
             opacity: 1;
             transform: scale(1);
+            transition: all 5s ease-in-out;
         }
 
         .texto-clic {
@@ -401,7 +404,9 @@
                 hint.style.display = 'none';
                 fadeInAudio(audio, 5000);
                 btnM.style.display = 'flex'; 
-                setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
+                
+                // Se cambió el tiempo de 600 a 5000 para que los botones aparezcan al finalizar el fade
+                setTimeout(() => { btnNav.style.display = 'flex'; }, 5000);
                 isOpen = true;
             }
         }
