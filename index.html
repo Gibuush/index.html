@@ -27,6 +27,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* FONDO BORROSO */
         body::before {
             content: "";
             position: fixed;
@@ -39,6 +40,18 @@
             z-index: -1;
         }
 
+        /* --- 5. VIÑETA / OSCURECIMIENTO EN LOS BORDES --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            /* Crea un gradiente circular: transparente en el centro y muy oscuro en los bordes */
+            background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none; /* Muy importante para que no bloquee los clics */
+            z-index: 2; /* Se coloca sobre el fondo pero debajo de la invitación */
+        }
+
         /* --- 1. PANTALLA DE CARGA (PRELOADER) --- */
         #preloader {
             position: fixed;
@@ -49,7 +62,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s ease-out, visibility 1s ease-out;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
         }
 
         .iniciales-preloader {
@@ -66,7 +79,6 @@
             100% { transform: scale(1.1); opacity: 1; }
         }
 
-        /* Clase que se agrega cuando carga la página */
         body.cargado #preloader {
             opacity: 0;
             visibility: hidden;
@@ -77,7 +89,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 0;
+            z-index: 1;
             pointer-events: none;
             overflow: hidden;
         }
@@ -313,10 +325,10 @@
 
         /* --- 3. GLASSMORPHISM EN LOS MODALES --- */
         .modal-content {
-            background: rgba(20, 20, 20, 0.65); /* Fondo oscuro semitransparente */
-            backdrop-filter: blur(15px); /* Efecto cristal esmerilado */
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(205, 168, 122, 0.3); /* Borde fino dorado */
+            border: 1px solid rgba(205, 168, 122, 0.3);
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             padding: 25px;
             border-radius: 20px;
@@ -329,7 +341,7 @@
         }
 
         .modal-content p {
-            color: #eaeaea; /* Texto claro para que contraste */
+            color: #eaeaea; 
             text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
         }
 
@@ -353,7 +365,7 @@
         .btn-regresar {
             background: none;
             border: none;
-            color: #cda87a; /* Color oro en vez de oscuro */
+            color: #cda87a; 
             font-family: 'Dancing Script', cursive;
             font-size: 1.8rem;
             margin-top: 5px;
@@ -520,11 +532,11 @@
     </button>
 
     <script>
-        // --- QUITAR PRELOADER CUANDO CARGUE LA PÁGINA ---
+        // --- QUITAR PRELOADER DE FORMA INMEDIATA ---
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.add('cargado');
-            }, 800); // 800ms de retraso para que se aprecie el efecto
+            }, 0); // Lo bajamos a 0 para que no tarde nada bro!
         });
 
         // --- CREAR PARTÍCULAS DE ORO ---
