@@ -57,19 +57,19 @@
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* --- NUEVA ANIMACIÓN DE PULSACIÓN PARA EL SOBRE --- */
         .sobre { 
             position: relative; 
             z-index: 100; 
             cursor: pointer;
-            animation: sobre-ritmo 4s ease-in-out infinite;
-            transform-origin: bottom center;
+            /* Se aplica la nueva animación de pulso */
+            animation: pulso-sobre 2s ease-in-out infinite;
+            transform-origin: center center;
         }
 
-        @keyframes sobre-ritmo {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(1.5deg) scale(1.02); }
-            50% { transform: rotate(0deg) scale(1); }
-            75% { transform: rotate(-1.5deg) scale(1.02); }
+        @keyframes pulso-sobre {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); } /* Crece un 3% suavemente */
         }
         
         #wrapperInvitacion {
@@ -137,7 +137,6 @@
             50% { transform: translate(-50%, -50%) scale(1.08); }
         }
 
-        /* --- CONTENEDOR FLUIDO AJUSTADO --- */
         .botones-container {
             display: flex; 
             flex-direction: column;
@@ -158,7 +157,6 @@
                         transform 1.5s ease-in-out;
         }
 
-        /* Se aumentó la altura máxima para que quepa el reloj */
         .mostrar-botones .botones-container {
             max-height: 350px; 
             opacity: 1;
@@ -379,10 +377,8 @@
         
         <img src="1.png" class="imagen-capa sobre" id="imgSobre" onclick="abrirSobre()">
         
-        <!-- Contenedor que agrupa el contador y los botones para que suban juntos -->
         <div class="botones-container" id="botonesNavegacion">
             
-            <!-- EL NUEVO CONTADOR -->
             <div class="contador-boda">
                 <div id="tiempoRestante" class="tiempo-restante">
                     <div class="bloque-tiempo">
@@ -402,7 +398,6 @@
                         <p>Seg</p>
                     </div>
                 </div>
-                <!-- Mensaje que aparecerá cuando llegue la fecha -->
                 <h3 id="mensajeHoy" class="mensaje-hoy" style="display: none;">¡ES HOY!</h3>
             </div>
 
@@ -415,7 +410,6 @@
         </div>
     </div>
 
-    <!-- Modales (se mantienen igual) -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -458,8 +452,6 @@
 
         let isOpen = false;
 
-        // --- LÓGICA DEL CONTADOR DE LA BODA ---
-        // Se establece la fecha de la boda: 15 de agosto de 2026 a las 00:00 hrs
         const fechaBoda = new Date('August 15, 2026 00:00:00').getTime();
 
         function actualizarContador() {
@@ -469,18 +461,15 @@
             const divTiempoRestante = document.getElementById('tiempoRestante');
             const h3MensajeHoy = document.getElementById('mensajeHoy');
 
-            // Si la fecha ya llegó o pasó
             if (diferencia <= 0) {
                 divTiempoRestante.style.display = 'none';
                 h3MensajeHoy.style.display = 'block';
             } else {
-                // Cálculos de tiempo
                 const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
                 const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
                 const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-                // Imprimir resultados con ceros a la izquierda (ej: "08" en vez de "8")
                 document.getElementById('dias').innerText = dias.toString().padStart(2, '0');
                 document.getElementById('horas').innerText = horas.toString().padStart(2, '0');
                 document.getElementById('minutos').innerText = minutos.toString().padStart(2, '0');
@@ -488,13 +477,9 @@
             }
         }
 
-        // Ejecutar el contador cada segundo
         setInterval(actualizarContador, 1000);
-        // Llamarlo una vez al instante para evitar que se vea en "00" el primer segundo
         actualizarContador();
 
-
-        // --- LÓGICA EXISTENTE DE LA INVITACIÓN ---
         function fadeInAudio(audioElement, duration) {
             audioElement.volume = 0;
             audioElement.play();
