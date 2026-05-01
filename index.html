@@ -526,7 +526,7 @@
             <!-- Se cambió Recepción por Celebración -->
             <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0; text-shadow: 1px 1px 5px rgba(0,0,0,0.8);">Civil y Celebración</h2>
             <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Celebración: 5:40 PM</p>
-            <a href="https://maps.app.goo.gl/GYrm8jsrD4LFyEfd6" class="btn-llegar">📍 Cómo llegar</a>
+            <button class="btn-llegar" onclick="abrirMapas()" style="border:none; cursor:pointer; font-family: 'Poppins', sans-serif;">📍 Cómo llegar</button>
             <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
         </div>
     </div>
@@ -692,6 +692,31 @@
                 const openModalId = event.target.id;
                 if(openModalId === 'modalZoom') cerrarZoom();
                 else cerrarModal(openModalId);
+            }
+        }
+
+        function abrirMapas() {
+            // 1. Enlace web (SOLO se usará si lo abren en una computadora)
+            const enlaceWeb = "https://maps.app.goo.gl/ufWkxgwqfRT2VhWT8";
+            
+            // 2. Tus coordenadas exactas en formato decimal (19°41'28.5"N 100°08'07.3"W)
+            const latitud = "19.69125";
+            const longitud = "-100.135361";
+            const coordenadas = latitud + "," + longitud;
+            
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Si es un iPhone / iPad (Abre mapas directo sin navegador)
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                window.location.href = "maps://?q=" + coordenadas;
+            } 
+            // Si es un Android (Abre Google Maps directo sin navegador y pone la chincheta)
+            else if (/android/i.test(userAgent)) {
+                window.location.href = "geo:" + coordenadas + "?q=" + coordenadas;
+            } 
+            // Si es una PC, abre el navegador web normal con tu enlace corto
+            else {
+                window.open(enlaceWeb, '_blank');
             }
         }
     </script>
