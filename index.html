@@ -217,9 +217,8 @@
             cursor: pointer;
         }
 
-        /* --- MODAL DE ZOOM OPTIMIZADO PARA CENTRADO --- */
         #modalZoom {
-            overflow: auto; /* Permite scroll cuando hay zoom */
+            overflow: auto; 
             display: none;
             justify-content: center;
             align-items: center;
@@ -253,15 +252,14 @@
             cursor: zoom-in;
             box-shadow: 0 0 30px rgba(0,0,0,0.5);
             object-fit: contain;
-            margin: auto; /* Ayuda al centrado en contenedores flex con scroll */
+            margin: auto;
         }
 
         #imgZoomContainer.zoomed-in {
-            transform: scale(2); /* Crece desde el centro */
+            transform: scale(2);
             cursor: zoom-out;
         }
 
-        /* Ajustes para móviles para que el zoom no se corte */
         @media (max-width: 768px) {
             #imgZoomContainer.zoomed-in {
                 transform: scale(1.8);
@@ -309,12 +307,11 @@
                 <span class="texto-ola">⤷ Ceremonia Religiosa</span>
             </button>
             <button class="btn-invisible" onclick="abrirModal('modalCivil')">
-                <span class="texto-ola">⤷ Ceremonia Civil y Celebración</span>
+                <span class="texto-ola">⤷ Ceremonia Civil y Recepción</span>
             </button>
         </div>
     </div>
 
-    <!-- Modal Zoom -->
     <div id="modalZoom" class="modal" onclick="cerrarZoom()">
         <div class="cerrar-zoom-x" onclick="cerrarZoom()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
@@ -322,7 +319,6 @@
         <img src="2.png" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
     </div>
 
-    <!-- Otros Modales -->
     <div id="modalReligiosa" class="modal" onclick="cerrarModal('modalReligiosa')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="iglesia.png" class="img-modal">
@@ -335,7 +331,7 @@
     <div id="modalCivil" class="modal" onclick="cerrarModal('modalCivil')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <img src="4.jpeg" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Ceremonia Civil y Celebración </h2>
+            <h2 style="font-family:'Dancing Script'; color:#cda87a; margin:0;">Civil y Recepción</h2>
             <p>San José del Rincón, Edo. Méx.<br>Civil: 5:00 PM | Recepción: 5:40 PM</p>
             <a href="https://maps.app.goo.gl/HfGtWeRviQj9LwW76" target="_blank" class="btn-llegar">📍 Cómo llegar</a>
             <button class="btn-regresar" onclick="cerrarModal('modalCivil')">Regresar</button>
@@ -359,11 +355,42 @@
 
         let isOpen = false;
 
+        // Función para subir el volumen gradualmente (Fade In)
+        function fadeInAudio(audioElement, duration) {
+            audioElement.volume = 0; // Empezamos en silencio
+            audioElement.play();
+            
+            let startVolume = 0;
+            let interval = 50; // Cada 50ms subimos un poco
+            let step = interval / duration; // Cuánto subir en cada paso
+
+            let fade = setInterval(() => {
+                if (startVolume < 1) {
+                    startVolume += step;
+                    if (startVolume > 1) startVolume = 1;
+                    audioElement.volume = startVolume;
+                } else {
+                    clearInterval(fade);
+                }
+            }, interval);
+        }
+
+        audio.addEventListener('timeupdate', function() {
+            var buffer = 0.4;
+            if(this.currentTime > this.duration - buffer){
+                this.currentTime = 0;
+                this.play();
+            }
+        });
+
         function abrirSobre() {
             if (!isOpen) {
                 container.classList.add('abierto');
                 hint.style.display = 'none';
-                audio.play().catch(error => console.log("Audio interactivo"));
+                
+                // Aplicamos el Fade In de 2 segundos (2000ms)
+                fadeInAudio(audio, 2000);
+                
                 btnM.style.display = 'flex'; 
                 setTimeout(() => { btnNav.style.display = 'flex'; }, 600);
                 isOpen = true;
@@ -386,7 +413,6 @@
             const modal = document.getElementById('modalZoom');
             modal.style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
-            // Reset zoom al abrir
             imgZoom.classList.remove('zoomed-in');
         }
 
@@ -400,7 +426,6 @@
             e.stopPropagation(); 
             imgZoom.classList.toggle('zoomed-in');
             
-            // Si hacemos zoom, centramos el scroll del modal
             if(imgZoom.classList.contains('zoomed-in')) {
                 const modal = document.getElementById('modalZoom');
                 setTimeout(() => {
