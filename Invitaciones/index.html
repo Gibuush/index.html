@@ -3,359 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boda Blanca y Manuel</title>
-    
+    <title>Invitación Especial - Luciana</title>
+    <!-- Fuentes de Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Librería Axios para solicitudes HTTP -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <style>
-        /* =========================================
-           FONDO Y ESTILOS GENERALES
-           ========================================= */
+        :root {
+            --pastel-pink: #fce4ec;
+            --soft-pink: #f8bbd0;
+            --rose-accent: #d87093;
+            --gold-accent: #e6c594;
+            --warm-white: #ffffff;
+            --text-dark: #5a4a42;
+            --text-muted: #8c7b73;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            margin: 0; padding: 0;
-            background-color: #000;
+            background: radial-gradient(circle at center, #fff0f5 0%, #f7e8ee 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        /* Contenedor Interactivo 3D */
+        .card-container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 440px;
+            border-radius: 35px;
+            box-shadow: 0 25px 50px rgba(248, 187, 208, 0.4), 0 10px 20px rgba(0, 0, 0, 0.05);
+            border: 8px solid var(--warm-white);
+            outline: 1px solid var(--pastel-pink);
             overflow: hidden;
-            font-family: 'Poppins', sans-serif;
             position: relative;
-        }
-
-        img {
-            image-rendering: high-quality; 
-            image-rendering: -webkit-optimize-contrast; 
-        }
-
-        /* FONDO DIFUMINADO */
-        body::before {
-            content: "";
-            position: absolute;
-            top: -10%; left: -10%;
-            width: 120%; height: 120%;
-            background-image: url('3.jpg');
-            background-size: cover;
-            background-position: center;
-            filter: blur(12px) brightness(0.7); 
-            z-index: -1;
-        }
-
-        /* =========================================
-           CONTENEDOR DE INVITACIÓN
-           ========================================= */
-        .contenedor-principal {
-            position: relative;
-            width: 90vw;
-            max-width: 500px;
             text-align: center;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            animation: cardAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .imagen-capa {
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Encabezado Animado */
+        .header-section {
+            padding: 35px 20px 10px 20px;
+            background: linear-gradient(180deg, #fff5f8 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .sub-heading {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeInDown 1s forwards 0.4s;
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            color: var(--rose-accent);
+            text-shadow: 2px 3px 6px rgba(216, 112, 147, 0.15);
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeInDown 1s forwards 0.6s;
+        }
+
+        /* Marco Flotante con Conejita */
+        .image-wrapper {
+            position: relative;
+            width: 70%;
+            margin: 10px auto;
+            border-radius: 50%;
+            padding: 10px;
+            background: radial-gradient(circle, rgba(252,228,236,0.9) 0%, rgba(255,255,255,0) 70%);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bunny-img {
             width: 100%;
             height: auto;
-            border-radius: 4px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform, opacity; 
+            border-radius: 20px;
+            display: block;
+            filter: drop-shadow(0 10px 15px rgba(216, 112, 147, 0.25));
         }
 
-        .sobre { 
-            position: relative; 
-            z-index: 10; 
-            pointer-events: auto; 
-            cursor: pointer;
-        }
-        
-        #wrapperInvitacion {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1; 
-        }
-
-        .invitacion-interna {
-            opacity: 0;
-            transform: scale(0.9);
-            cursor: zoom-in; 
-            pointer-events: none; 
-        }
-
-        .hint-zoom {
-            position: absolute;
-            top: 15px; right: 15px;
-            font-size: 1.5rem;
-            color: white;
-            text-shadow: 0px 0px 10px rgba(0,0,0,0.5);
-            z-index: 25;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none; 
-        }
-
-        /* ANIMACIONES DE APERTURA */
-        .abierto .sobre {
-            opacity: 0;
-            transform: translateY(-120px) scale(1.1);
-            pointer-events: none; 
-        }
-
-        .abierto .invitacion-interna {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto; 
-        }
-
-        .abierto #wrapperInvitacion:hover .hint-zoom {
-            opacity: 1; 
-        }
-
-        .texto-clic {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: white;
-            text-shadow: 2px 2px 15px rgba(0,0,0,0.9);
-            z-index: 30;
-            animation: latido 1.5s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes latido {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        /* =========================================
-           BOTONES INVISIBLES ELEGANTES (PORTADA)
-           ========================================= */
-        .botones-container {
-            margin-top: 25px;
-            display: none; 
-            flex-direction: row;
-            justify-content: space-around;
-            gap: 10px;
-            z-index: 40;
-            position: relative;
-            width: 100%;
-        }
-
-        .btn-invisible {
-            background: none;
-            border: none;
-            color: #f5f0e6;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            cursor: pointer;
-            padding: 5px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .btn-invisible:hover {
-            color: #cda87a;
-            transform: translateY(-2px);
-        }
-
-        /* =========================================
-           MODALES Y BOTONES DE REGRESAR
-           ========================================= */
-        .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); 
-            display: none;
+        /* Contador Regresivo (Countdown) */
+        .countdown-container {
+            display: flex;
             justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 20px;
+            gap: 12px;
+            margin: 20px 25px 10px 25px;
         }
 
-        .modal-content {
-            background: white;
-            padding: 30px;
+        .time-box {
+            background: #fff8fa;
+            border: 1px solid #fce4ec;
+            padding: 8px;
             border-radius: 12px;
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.9);
-            animation: slideUp 0.4s ease;
+            min-width: 60px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
-        .img-modal {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
+        .time-box span {
+            display: block;
+        }
+
+        .time-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--rose-accent);
+        }
+
+        .time-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* Grid de Detalles */
+        .details-section {
+            padding: 10px 25px 35px 25px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-card {
+            background: #fff8fa;
+            border: 1px solid #fce4ec;
+            padding: 12px 10px;
+            border-radius: 16px;
+        }
+
+        .info-icon { font-size: 1.1rem; display: block; margin-bottom: 3px; }
+        .info-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        .info-value { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
+
+        .location-box {
+            background: #fff8fa;
+            border: 1px solid #fce4ec;
+            padding: 12px;
+            border-radius: 16px;
             margin-bottom: 20px;
         }
 
-        /* BOTÓN REGRESAR (Invisible dentro de modal) */
-        .btn-regresar-modal {
-            background: none;
-            border: none;
-            color: #4a3728; /* Café oscuro para contrastar con el blanco */
-            font-family: 'Dancing Script', cursive;
-            font-size: 2rem;
-            cursor: pointer;
-            margin-top: 15px;
+        /* Botón Asistido por Axios */
+        .cta-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #f48fb1 0%, #d87093 100%);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 15px 0;
+            border-radius: 30px;
+            box-shadow: 0 6px 18px rgba(216, 112, 147, 0.35);
             transition: all 0.3s ease;
-        }
-
-        .btn-regresar-modal:hover {
-            color: #cda87a; /* Cambia a dorado al pasar el mouse */
-            transform: scale(1.05);
-        }
-
-        #imgZoomContainer {
-            max-width: 95vw;
-            max-height: 85vh;
-            border-radius: 4px;
-            transition: transform 0.3s ease;
-            cursor: zoom-in;
-        }
-
-        .zoomed-in {
-            transform: scale(1.7); 
-            cursor: zoom-out !important;
-        }
-
-        .btn-musica-flotante {
-            position: fixed;
-            bottom: 20px; right: 20px;
-            background: white;
-            border: 2px solid #cda87a;
-            color: #cda87a;
-            width: 55px; height: 55px;
-            border-radius: 50%;
+            border: none;
             cursor: pointer;
-            display: none;
-            z-index: 200;
-            font-size: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
+        .cta-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 22px rgba(216, 112, 147, 0.45);
+        }
+
+        .cta-button:disabled {
+            background: #d3d3d3;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-15px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <audio id="musica" src="SONG.mp3" preload="auto" loop></audio>
-
-    <div class="contenedor-principal" id="mainContainer">
-        <div class="texto-clic" id="hintText">¡Haga clic aquí!</div>
-        
-        <div id="wrapperInvitacion">
-            <img src="2.jpg" class="imagen-capa invitacion-interna" id="imgInvitacion">
-            <div class="hint-zoom">🔍︎</div>
+    <div class="card-container" id="card">
+        <div class="header-section">
+            <p class="sub-heading">¡Acompáñanos a celebrar!</p>
+            <h1 class="main-title">Luciana</h1>
         </div>
-        
-        <img src="1.png" class="imagen-capa sobre" id="imgSobre">
-        
-        <div class="botones-container" id="botonesNavegacion">
-            <button class="btn-invisible" onclick="abrirModal('modalReligiosa')"> ⤷ Ceremonia Religiosa </button>
-            <button class="btn-invisible" onclick="abrirModal('modalCivil')"> ⤷ Civil y Recepción</button>
-        </div>
-    </div>
 
-    <div id="modalZoom" class="modal" onclick="cerrarZoom(event)">
-        <div style="text-align: center;">
-            <img src="2.jpg" id="imgZoomContainer" onclick="hacerZoomDoble(event)">
-            <br>
-            <button class="btn-regresar-modal" style="color: white;">Regresar</button>
+        <div class="image-wrapper">
+            <img class="bunny-img" src="" alt="Conejita Luciana">
         </div>
-    </div>
 
-    <div id="modalReligiosa" class="modal">
-        <div class="modal-content">
-            <img src="iglesia.png" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; font-size: 2.5rem; color:#cda87a; margin-bottom:10px;">Ceremonia Religiosa</h2>
-            <p><strong>Lugar:</strong> Templo de la Inmaculada Concepción</p>
-            <p>Angangueo, Michoacán | 1:00 PM</p>
-            <button class="btn-regresar-modal" onclick="cerrarModal('modalReligiosa')">Regresar</button>
+        <!-- Contador Regresivo -->
+        <div class="countdown-container">
+            <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Días</span></div>
+            <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
+            <div class="time-box"><span class="time-num" id="minutes">00</span><span class="time-label">Min</span></div>
+            <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Seg</span></div>
         </div>
-    </div>
 
-    <div id="modalCivil" class="modal">
-        <div class="modal-content">
-            <img src="1.png" class="img-modal">
-            <h2 style="font-family:'Dancing Script'; font-size: 2.5rem; color:#cda87a; margin-bottom:10px;">Civil y Recepción</h2>
-            <p><strong>Civil:</strong> 5:00 PM | <strong>Recepción:</strong> 5:40 PM</p>
-            <p>San José del Rincón, Estado de México</p>
-            <button class="btn-regresar-modal" onclick="cerrarModal('modalCivil')">Regresar</button>
+        <div class="details-section">
+            <div class="info-grid">
+                <div class="info-card">
+                    <span class="info-icon">📅</span>
+                    <div class="info-label">Fecha</div>
+                    <div class="info-value">Sábado, 24 Oct</div>
+                </div>
+                <div class="info-card">
+                    <span class="info-icon">⏰</span>
+                    <div class="info-label">Hora</div>
+                    <div class="info-value">4:30 PM</div>
+                </div>
+            </div>
+
+            <div class="location-box">
+                <span class="info-icon">📍</span>
+                <div class="info-label">Lugar</div>
+                <div class="info-value">Jardín de Eventos "Ma Salon"</div>
+            </div>
+
+            <button class="cta-button" id="confirmBtn" onclick="confirmAssistance()">
+                Confirmar Asistencia
+            </button>
         </div>
     </div>
-
-    <button id="btnMusic" class="btn-musica-flotante" onclick="toggleMusic()">⏸</button>
 
     <script>
-        const container = document.getElementById('mainContainer');
-        const imgSobre = document.getElementById('imgSobre');
-        const audio = document.getElementById('musica');
-        const btnNav = document.getElementById('botonesNavegacion');
-        const hint = document.getElementById('hintText');
-        const btnM = document.getElementById('btnMusic');
-        const imgInvitacion = document.getElementById('imgInvitacion');
-        const modalZoom = document.getElementById('modalZoom');
-        const imgZoomContainer = document.getElementById('imgZoomContainer');
+        // 1. Contador Regresivo (Countdown)
+        const eventDate = new Date("October 24, 2026 16:30:00").getTime();
 
-        let isOpen = false;
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const difference = eventDate - now;
 
-        function abrirSobre() {
-            if (!isOpen) {
-                container.classList.add('abierto');
-                hint.style.display = 'none';
-                audio.play();
-                btnM.style.display = 'block';
-                setTimeout(() => { btnNav.style.display = 'flex'; }, 800);
-                isOpen = true;
+            if (difference < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown-container").innerHTML = "<p>¡El evento ha comenzado!</p>";
+                return;
             }
-        }
 
-        imgSobre.addEventListener('click', abrirSobre);
-        hint.addEventListener('click', abrirSobre);
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        imgInvitacion.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            modalZoom.style.display = 'flex';
+            document.getElementById("days").innerText = days < 10 ? '0' + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+        }, 1000);
+
+        // 2. Efecto 3D / Parallax al mover el mouse sobre la pantalla
+        const card = document.getElementById("card");
+
+        document.addEventListener("mousemove", (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        function hacerZoomDoble(event) {
-            event.stopPropagation(); 
-            imgZoomContainer.classList.toggle('zoomed-in');
-        }
+        // Restablecer posición cuando sale el mouse
+        document.addEventListener("mouseleave", () => {
+            card.style.transform = "rotateY(0deg) rotateX(0deg)";
+        });
 
-        function cerrarZoom() {
-            modalZoom.style.display = 'none';
-            imgZoomContainer.classList.remove('zoomed-in');
-        }
+        // 3. Confirmación interactiva con Axios
+        function confirmAssistance() {
+            const btn = document.getElementById("confirmBtn");
+            btn.innerText = "Registrando...";
+            btn.disabled = true;
 
-        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                btnM.innerText = '⏸';
-            } else {
-                audio.pause();
-                btnM.innerText = '▶';
-            }
-        }
-
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-                imgZoomContainer.classList.remove('zoomed-in');
-            }
+            // Simulación de envío AJAX/Axios a un API o webhook (ejemplo: Formspree o Backend propio)
+            axios.post('https://httpbin.org/post', {
+                event: 'Baby Shower Luciana',
+                status: 'Confirmed',
+                timestamp: new Date()
+            })
+            .then(response => {
+                btn.innerText = "¡Asistencia Confirmada! ✨";
+                btn.style.background = "linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%)";
+                
+                // Redireccionar a WhatsApp tras confirmar
+                setTimeout(() => {
+                    window.open("https://wa.me/tuNumeroDeTelefono?text=¡Hola!%20Confirmo%20mi%20asistencia%20al%20evento%20de%20Luciana", "_blank");
+                }, 1200);
+            })
+            .catch(error => {
+                btn.innerText = "Error, intentar de nuevo";
+                btn.disabled = false;
+                console.error("Error al registrar:", error);
+            });
         }
     </script>
 </body>
