@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación Especial - Luciana</title>
+    <title>Invitación Especial - Lía Ailany</title>
     <!-- Fuentes de Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    <!-- Librería Axios para solicitudes HTTP -->
+    <!-- Librería Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <style>
@@ -43,7 +43,7 @@
 
         /* Contenedor Interactivo 3D */
         .card-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             width: 100%;
             max-width: 440px;
             border-radius: 35px;
@@ -81,19 +81,20 @@
 
         .main-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 4.5rem;
+            font-size: 3.8rem;
             color: var(--rose-accent);
             text-shadow: 2px 3px 6px rgba(216, 112, 147, 0.15);
             line-height: 1.1;
             opacity: 0;
             animation: fadeInDown 1s forwards 0.6s;
+            margin-top: 5px;
         }
 
         /* Marco Flotante con Conejita */
         .image-wrapper {
             position: relative;
-            width: 70%;
-            margin: 10px auto;
+            width: 65%;
+            margin: 5px auto;
             border-radius: 50%;
             padding: 10px;
             background: radial-gradient(circle, rgba(252,228,236,0.9) 0%, rgba(255,255,255,0) 70%);
@@ -117,8 +118,8 @@
         .countdown-container {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin: 20px 25px 10px 25px;
+            gap: 10px;
+            margin: 15px 25px 10px 25px;
         }
 
         .time-box {
@@ -126,7 +127,7 @@
             border: 1px solid #fce4ec;
             padding: 8px;
             border-radius: 12px;
-            min-width: 60px;
+            min-width: 58px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
 
@@ -136,7 +137,7 @@
 
         .time-num {
             font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--rose-accent);
         }
@@ -169,7 +170,7 @@
 
         .info-icon { font-size: 1.1rem; display: block; margin-bottom: 3px; }
         .info-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
-        .info-value { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
+        .info-value { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 0.88rem; color: var(--text-dark); }
 
         .location-box {
             background: #fff8fa;
@@ -220,11 +221,12 @@
     <div class="card-container" id="card">
         <div class="header-section">
             <p class="sub-heading">¡Acompáñanos a celebrar!</p>
-            <h1 class="main-title">Luciana</h1>
+            <h1 class="main-title">Lía Ailany</h1>
         </div>
 
         <div class="image-wrapper">
-            <img class="bunny-img" src="" alt="Conejita Luciana">
+            <!-- Recuerda colocar aquí la ruta o URL de tu imagen de la conejita -->
+            <img class="bunny-img" src="tu_imagen_conejita.png" alt="Conejita Lía Ailany">
         </div>
 
         <!-- Contador Regresivo -->
@@ -240,12 +242,12 @@
                 <div class="info-card">
                     <span class="info-icon">📅</span>
                     <div class="info-label">Fecha</div>
-                    <div class="info-value">Sábado, 24 Oct</div>
+                    <div class="info-value">19 de Septiembre</div>
                 </div>
                 <div class="info-card">
                     <span class="info-icon">⏰</span>
                     <div class="info-label">Hora</div>
-                    <div class="info-value">4:30 PM</div>
+                    <div class="info-value">1:00 PM</div>
                 </div>
             </div>
 
@@ -262,8 +264,8 @@
     </div>
 
     <script>
-        // 1. Contador Regresivo (Countdown)
-        const eventDate = new Date("October 24, 2026 16:30:00").getTime();
+        // 1. Contador Regresivo actualizado al 19 de Septiembre, 1:00 PM
+        const eventDate = new Date("September 19, 2026 13:00:00").getTime();
 
         const timer = setInterval(() => {
             const now = new Date().getTime();
@@ -271,7 +273,7 @@
 
             if (difference < 0) {
                 clearInterval(timer);
-                document.querySelector(".countdown-container").innerHTML = "<p>¡El evento ha comenzado!</p>";
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-accent); font-weight:600;'>¡El evento ha comenzado!</p>";
                 return;
             }
 
@@ -286,7 +288,7 @@
             document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
         }, 1000);
 
-        // 2. Efecto 3D / Parallax al mover el mouse sobre la pantalla
+        // 2. Efecto Parallax en 3D
         const card = document.getElementById("card");
 
         document.addEventListener("mousemove", (e) => {
@@ -295,20 +297,18 @@
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
-        // Restablecer posición cuando sale el mouse
         document.addEventListener("mouseleave", () => {
             card.style.transform = "rotateY(0deg) rotateX(0deg)";
         });
 
-        // 3. Confirmación interactiva con Axios
+        // 3. Confirmación con Axios y redirección
         function confirmAssistance() {
             const btn = document.getElementById("confirmBtn");
             btn.innerText = "Registrando...";
             btn.disabled = true;
 
-            // Simulación de envío AJAX/Axios a un API o webhook (ejemplo: Formspree o Backend propio)
             axios.post('https://httpbin.org/post', {
-                event: 'Baby Shower Luciana',
+                event: 'Baby Shower Lía Ailany',
                 status: 'Confirmed',
                 timestamp: new Date()
             })
@@ -316,9 +316,10 @@
                 btn.innerText = "¡Asistencia Confirmada! ✨";
                 btn.style.background = "linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%)";
                 
-                // Redireccionar a WhatsApp tras confirmar
+                // Redirecciona al WhatsApp de confirmación con el mensaje personalizado
                 setTimeout(() => {
-                    window.open("https://wa.me/tuNumeroDeTelefono?text=¡Hola!%20Confirmo%20mi%20asistencia%20al%20evento%20de%20Luciana", "_blank");
+                    const mensaje = encodeURIComponent("¡Hola! Confirmo mi asistencia al evento de Lía Ailany este 19 de Septiembre.");
+                    window.open(`https://wa.me/tuNumeroDeTelefono?text=${mensaje}`, "_blank");
                 }, 1200);
             })
             .catch(error => {
