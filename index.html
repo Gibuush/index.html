@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación Especial - Lía Ailany</title>
-    <!-- Fuentes de Google Fonts -->
+    
+    <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
-    <!-- Librería Axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     
+    <!-- Icons via FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
             --pastel-pink: #fce4ec;
             --soft-pink: #f8bbd0;
             --rose-accent: #d87093;
-            --gold-accent: #e6c594;
+            --rose-dark: #b85273;
+            --gold-accent: #d4af37;
             --warm-white: #ffffff;
-            --text-dark: #5a4a42;
+            --text-dark: #4a3e3d;
             --text-muted: #8c7b73;
         }
 
@@ -29,32 +32,57 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #fff0f5 0%, #f7e8ee 100%);
+            background: radial-gradient(circle at center, #fff0f5 0%, #edd3dc 100%);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 20px 10px;
             overflow-x: hidden;
             perspective: 1000px;
         }
 
-        /* Contenedor Interactivo 3D */
+        /* Control de Música Flotante */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid var(--soft-pink);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--rose-accent);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(216, 112, 147, 0.25);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        /* Tarjeta Principal */
         .card-container {
-            background: rgba(255, 255, 255, 0.96);
+            background: rgba(255, 255, 255, 0.94);
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             border-radius: 35px;
-            box-shadow: 0 25px 50px rgba(248, 187, 208, 0.4), 0 10px 20px rgba(0, 0, 0, 0.05);
-            border: 8px solid var(--warm-white);
-            outline: 1px solid var(--pastel-pink);
+            box-shadow: 0 30px 60px rgba(216, 112, 147, 0.25), 0 10px 20px rgba(0, 0, 0, 0.05);
+            border: 6px solid var(--warm-white);
+            outline: 1px solid var(--soft-pink);
             overflow: hidden;
             position: relative;
             text-align: center;
             transform-style: preserve-3d;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.15s ease-out;
             animation: cardAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -63,20 +91,19 @@
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Encabezado Animado */
+        /* Encabezado */
         .header-section {
             padding: 35px 20px 10px 20px;
-            background: linear-gradient(180deg, #fff5f8 0%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(180deg, #fff0f5 0%, rgba(255,255,255,0) 100%);
         }
 
         .sub-heading {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 3px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            opacity: 0;
-            animation: fadeInDown 1s forwards 0.4s;
+            font-size: 0.7rem;
+            color: var(--gold-accent);
+            font-weight: 600;
         }
 
         .main-title {
@@ -85,151 +112,219 @@
             color: var(--rose-accent);
             text-shadow: 2px 3px 6px rgba(216, 112, 147, 0.15);
             line-height: 1.1;
-            opacity: 0;
-            animation: fadeInDown 1s forwards 0.6s;
             margin-top: 5px;
         }
 
-        /* Marco Flotante con Conejita */
+        .event-tag {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Marco de Imagen Flotante */
         .image-wrapper {
             position: relative;
-            width: 65%;
-            margin: 5px auto;
+            width: 70%;
+            margin: 15px auto;
             border-radius: 50%;
             padding: 10px;
-            background: radial-gradient(circle, rgba(252,228,236,0.9) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(252,228,236,0.8) 0%, rgba(255,255,255,0) 70%);
             animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         .bunny-img {
             width: 100%;
             height: auto;
-            border-radius: 20px;
+            border-radius: 50%;
             display: block;
-            filter: drop-shadow(0 10px 15px rgba(216, 112, 147, 0.25));
+            filter: drop-shadow(0 10px 15px rgba(216, 112, 147, 0.2));
+            border: 3px solid var(--warm-white);
         }
 
-        /* Contador Regresivo (Countdown) */
+        /* Mensaje de Bienvenida */
+        .welcome-text {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            padding: 0 30px;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        /* Contador Regresivo */
+        .countdown-title {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-accent);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
         .countdown-container {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 15px 25px 10px 25px;
+            margin: 0 20px 20px 20px;
         }
 
         .time-box {
-            background: #fff8fa;
-            border: 1px solid #fce4ec;
+            background: rgba(252, 228, 236, 0.35);
+            border: 1px solid var(--pastel-pink);
             padding: 8px;
             border-radius: 12px;
             min-width: 58px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-
-        .time-box span {
-            display: block;
         }
 
         .time-num {
             font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: var(--rose-accent);
+            display: block;
         }
 
         .time-label {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             text-transform: uppercase;
             color: var(--text-muted);
+            letter-spacing: 1px;
         }
 
         /* Grid de Detalles */
         .details-section {
-            padding: 10px 25px 35px 25px;
+            padding: 0 25px 30px 25px;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .info-card {
-            background: #fff8fa;
+            background: #ffffff;
             border: 1px solid #fce4ec;
-            padding: 12px 10px;
-            border-radius: 16px;
+            padding: 14px 10px;
+            border-radius: 18px;
+            box-shadow: 0 4px 12px rgba(248, 187, 208, 0.15);
         }
 
-        .info-icon { font-size: 1.1rem; display: block; margin-bottom: 3px; }
-        .info-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
-        .info-value { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 0.88rem; color: var(--text-dark); }
+        .info-icon {
+            font-size: 1.2rem;
+            color: var(--rose-accent);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .info-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
 
         .location-box {
-            background: #fff8fa;
+            background: #ffffff;
             border: 1px solid #fce4ec;
-            padding: 12px;
-            border-radius: 16px;
+            padding: 14px;
+            border-radius: 18px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(248, 187, 208, 0.15);
         }
 
-        /* Botón Asistido por Axios */
-        .cta-button {
-            display: block;
+        /* Botones de Acción */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
-            background: linear-gradient(135deg, #f48fb1 0%, #d87093 100%);
-            color: white;
+            padding: 14px 0;
+            border-radius: 25px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            padding: 15px 0;
-            border-radius: 30px;
-            box-shadow: 0 6px 18px rgba(216, 112, 147, 0.35);
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
         }
 
-        .cta-button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 22px rgba(216, 112, 147, 0.45);
+        .btn-primary {
+            background: linear-gradient(135deg, #f48fb1 0%, #d87093 100%);
+            color: white;
+            box-shadow: 0 6px 18px rgba(216, 112, 147, 0.3);
         }
 
-        .cta-button:disabled {
-            background: #d3d3d3;
-            cursor: not-allowed;
-            box-shadow: none;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(216, 112, 147, 0.4);
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--rose-dark);
+            border: 1px solid var(--soft-pink);
+        }
+
+        .btn-secondary:hover {
+            background: var(--pastel-pink);
         }
     </style>
 </head>
 <body>
 
+    <!-- Botón de Música -->
+    <div class="music-control" id="musicBtn" onclick="toggleAudio()">
+        <i class="fa-solid fa-music" id="musicIcon"></i>
+    </div>
+    <audio id="bgAudio" loop preload="auto">
+        <!-- Reemplaza con el enlace directo a tu archivo de audio MP3 -->
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="card-container" id="card">
         <div class="header-section">
-            <p class="sub-heading">¡Acompáñanos a celebrar!</p>
+            <p class="sub-heading">Estás cordialmente invitado</p>
             <h1 class="main-title">Lía Ailany</h1>
+            <p class="event-tag">NUESTRO BABY SHOWER</p>
         </div>
 
         <div class="image-wrapper">
-            <!-- Recuerda colocar aquí la ruta o URL de tu imagen de la conejita -->
-            <img class="bunny-img" src="descarga.jpg" alt="Conejita Lía Ailany">
+            <!-- Coloca aquí la imagen representativa o foto de ultrasonido/conejita -->
+            <img class="bunny-img" src="tu_imagen_conejita.png" alt="Baby Shower Lía Ailany">
         </div>
 
+        <p class="welcome-text">
+            Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables.
+        </p>
+
         <!-- Contador Regresivo -->
+        <div class="countdown-title">Faltan tan solo</div>
         <div class="countdown-container">
             <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Días</span></div>
             <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
@@ -237,34 +332,44 @@
             <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Seg</span></div>
         </div>
 
+        <!-- Detalles del Evento -->
         <div class="details-section">
             <div class="info-grid">
                 <div class="info-card">
-                    <span class="info-icon">📅</span>
+                    <i class="fa-regular fa-calendar-check info-icon"></i>
                     <div class="info-label">Fecha</div>
-                    <div class="info-value">19 de Septiembre</div>
+                    <div class="info-value">19 Sept, 2026</div>
                 </div>
                 <div class="info-card">
-                    <span class="info-icon">⏰</span>
+                    <i class="fa-regular fa-clock info-icon"></i>
                     <div class="info-label">Hora</div>
                     <div class="info-value">1:00 PM</div>
                 </div>
             </div>
 
             <div class="location-box">
-                <span class="info-icon">📍</span>
+                <i class="fa-solid fa-location-dot info-icon"></i>
                 <div class="info-label">Lugar</div>
                 <div class="info-value">Jardín de Eventos "Ma Salon"</div>
             </div>
 
-            <button class="cta-button" id="confirmBtn" onclick="confirmAssistance()">
-                Confirmar Asistencia
-            </button>
+            <!-- Botones Interactivos sin Registro -->
+            <div class="action-buttons">
+                <!-- Abre Google Maps directamente -->
+                <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn btn-primary">
+                    <i class="fa-solid fa-map-location-dot"></i> Ver Ubicación
+                </a>
+                
+                <!-- Permite enviar un WhatsApp directo al anfitrión -->
+                <a href="https://wa.me/tuNumeroDeTelefono?text=%C2%A1Hola!%20Recib%C3%AD%20la%20invitaci%C3%B3n%20para%20el%20Baby%20Shower%20de%20L%C3%ADa%20Ailany.%20%C2%A1Ah%C3%AD%20estar%C3%A9!" target="_blank" class="btn btn-secondary">
+                    <i class="fa-brands fa-whatsapp"></i> Confirmar por WhatsApp
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
-        // 1. Contador Regresivo actualizado al 19 de Septiembre, 1:00 PM
+        // 1. Contador Regresivo
         const eventDate = new Date("September 19, 2026 13:00:00").getTime();
 
         const timer = setInterval(() => {
@@ -273,7 +378,7 @@
 
             if (difference < 0) {
                 clearInterval(timer);
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-accent); font-weight:600;'>¡El evento ha comenzado!</p>";
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-accent); font-weight:600;'>¡El gran día ha llegado!</p>";
                 return;
             }
 
@@ -288,46 +393,35 @@
             document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
         }, 1000);
 
-        // 2. Efecto Parallax en 3D
+        // 2. Control de Audio
+        const audio = document.getElementById("bgAudio");
+        const musicBtn = document.getElementById("musicBtn");
+        const musicIcon = document.getElementById("musicIcon");
+        let isPlaying = false;
+
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.className = "fa-solid fa-music";
+            } else {
+                audio.play();
+                musicIcon.className = "fa-solid fa-pause";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // 3. Efecto 3D suave al mover el mouse
         const card = document.getElementById("card");
 
         document.addEventListener("mousemove", (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
         document.addEventListener("mouseleave", () => {
             card.style.transform = "rotateY(0deg) rotateX(0deg)";
         });
-
-        // 3. Confirmación con Axios y redirección
-        function confirmAssistance() {
-            const btn = document.getElementById("confirmBtn");
-            btn.innerText = "Registrando...";
-            btn.disabled = true;
-
-            axios.post('https://httpbin.org/post', {
-                event: 'Baby Shower Lía Ailany',
-                status: 'Confirmed',
-                timestamp: new Date()
-            })
-            .then(response => {
-                btn.innerText = "¡Asistencia Confirmada! ✨";
-                btn.style.background = "linear-gradient(135deg, #a8e6cf 0%, #56ab2f 100%)";
-                
-                // Redirecciona al WhatsApp de confirmación con el mensaje personalizado
-                setTimeout(() => {
-                    const mensaje = encodeURIComponent("¡Hola! Confirmo mi asistencia al evento de Lía Ailany este 19 de Septiembre.");
-                    window.open(`https://wa.me/tuNumeroDeTelefono?text=${mensaje}`, "_blank");
-                }, 1200);
-            })
-            .catch(error => {
-                btn.innerText = "Error, intentar de nuevo";
-                btn.disabled = false;
-                console.error("Error al registrar:", error);
-            });
-        }
     </script>
 </body>
 </html>
