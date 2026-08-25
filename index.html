@@ -8,21 +8,22 @@
     <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <!-- Icons via FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --pastel-pink: #fce4ec;
-            --soft-pink: #f8bbd0;
-            --rose-accent: #d87093;
-            --rose-dark: #b85273;
-            --gold-accent: #d4af37;
+            --rose-quartz: #f4e3e6;
+            --dusty-rose: #d4a3a8;
+            --rose-gold: #b76e79;
+            --deep-rose: #8a4b56;
+            --gold-accent: #c5a059;
+            --champagne-bg: #faf6f0;
             --warm-white: #ffffff;
-            --text-dark: #4a3e3d;
-            --text-muted: #8c7b73;
+            --text-dark: #3a3335;
+            --text-muted: #7d7073;
         }
 
         * {
@@ -32,14 +33,20 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #fff0f5 0%, #edd3dc 100%);
+            /* Fondo elegante generado con CSS */
+            background-color: var(--champagne-bg);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(244, 227, 230, 0.8) 0px, transparent 50%),
+                radial-gradient(at 90% 10%, rgba(212, 163, 168, 0.4) 0px, transparent 50%),
+                radial-gradient(at 50% 90%, rgba(244, 227, 230, 0.9) 0px, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(250, 246, 240, 1) 100%);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px 10px;
+            padding: 25px 15px;
             overflow-x: hidden;
             perspective: 1000px;
         }
@@ -50,93 +57,93 @@
             top: 20px;
             right: 20px;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid var(--soft-pink);
-            width: 42px;
-            height: 42px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--dusty-rose);
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--rose-accent);
+            color: var(--rose-gold);
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(216, 112, 147, 0.25);
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.15);
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, background 0.3s;
         }
 
         .music-control:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
+            background: #ffffff;
         }
 
         /* Tarjeta Principal */
         .card-container {
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.95);
             width: 100%;
             max-width: 420px;
-            border-radius: 35px;
-            box-shadow: 0 30px 60px rgba(216, 112, 147, 0.25), 0 10px 20px rgba(0, 0, 0, 0.05);
-            border: 6px solid var(--warm-white);
-            outline: 1px solid var(--soft-pink);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(138, 75, 86, 0.12), 0 2px 10px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(212, 163, 168, 0.4);
             overflow: hidden;
             position: relative;
             text-align: center;
             transform-style: preserve-3d;
-            transition: transform 0.15s ease-out;
-            animation: cardAppear 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.2s ease-out;
+            animation: cardAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            from { opacity: 0; transform: translateY(30px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         /* Encabezado */
         .header-section {
-            padding: 35px 20px 10px 20px;
-            background: linear-gradient(180deg, #fff0f5 0%, rgba(255,255,255,0) 100%);
+            padding: 40px 25px 10px 25px;
         }
 
         .sub-heading {
             font-family: 'Cinzel', serif;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--gold-accent);
             font-weight: 600;
         }
 
         .main-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.8rem;
-            color: var(--rose-accent);
-            text-shadow: 2px 3px 6px rgba(216, 112, 147, 0.15);
+            font-size: 4rem;
+            color: var(--rose-gold);
             line-height: 1.1;
             margin-top: 5px;
+            font-weight: 400;
         }
 
         .event-tag {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 0.95rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-top: 5px;
+            margin-top: 8px;
+            text-transform: uppercase;
         }
 
         /* Marco de Imagen Flotante */
         .image-wrapper {
             position: relative;
-            width: 70%;
-            margin: 15px auto;
+            width: 65%;
+            margin: 20px auto;
             border-radius: 50%;
-            padding: 10px;
-            background: radial-gradient(circle, rgba(252,228,236,0.8) 0%, rgba(255,255,255,0) 70%);
-            animation: float 4s ease-in-out infinite;
+            padding: 8px;
+            background: linear-gradient(135deg, var(--rose-quartz) 0%, rgba(255,255,255,0) 100%);
+            animation: float 5s ease-in-out infinite;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-6px); }
         }
 
         .bunny-img {
@@ -144,63 +151,67 @@
             height: auto;
             border-radius: 50%;
             display: block;
-            filter: drop-shadow(0 10px 15px rgba(216, 112, 147, 0.2));
-            border: 3px solid var(--warm-white);
+            box-shadow: 0 8px 20px rgba(183, 110, 121, 0.15);
+            border: 2px solid var(--warm-white);
         }
 
         /* Mensaje de Bienvenida */
         .welcome-text {
-            font-size: 0.85rem;
-            line-height: 1.6;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            line-height: 1.5;
             color: var(--text-dark);
-            padding: 0 30px;
-            margin-bottom: 15px;
-            font-weight: 400;
+            padding: 0 35px;
+            margin-bottom: 25px;
+            font-style: italic;
         }
 
         /* Contador Regresivo */
         .countdown-title {
-            font-size: 0.65rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--gold-accent);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .countdown-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 0 20px 20px 20px;
+            gap: 12px;
+            margin: 0 20px 25px 20px;
         }
 
         .time-box {
-            background: rgba(252, 228, 236, 0.35);
-            border: 1px solid var(--pastel-pink);
-            padding: 8px;
+            background: var(--champagne-bg);
+            border: 1px solid rgba(212, 163, 168, 0.3);
+            padding: 10px 6px;
             border-radius: 12px;
-            min-width: 58px;
+            min-width: 60px;
         }
 
         .time-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
             font-weight: 600;
-            color: var(--rose-accent);
+            color: var(--deep-rose);
             display: block;
         }
 
         .time-label {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             text-transform: uppercase;
             color: var(--text-muted);
             letter-spacing: 1px;
+            margin-top: 2px;
+            display: block;
         }
 
-        /* Grid de Detalles */
+        /* Detalles del Evento */
         .details-section {
-            padding: 0 25px 30px 25px;
+            padding: 0 30px 35px 30px;
         }
 
         .info-grid {
@@ -211,63 +222,57 @@
         }
 
         .info-card {
-            background: #ffffff;
-            border: 1px solid #fce4ec;
-            padding: 14px 10px;
-            border-radius: 18px;
-            box-shadow: 0 4px 12px rgba(248, 187, 208, 0.15);
+            background: var(--champagne-bg);
+            border: 1px solid rgba(212, 163, 168, 0.25);
+            padding: 16px 10px;
+            border-radius: 16px;
         }
 
         .info-icon {
-            font-size: 1.2rem;
-            color: var(--rose-accent);
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: var(--rose-gold);
+            margin-bottom: 6px;
             display: block;
         }
 
         .info-label {
-            font-size: 0.6rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--text-muted);
+            color: var(--gold-accent);
+            font-weight: 600;
         }
 
         .info-value {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 1.05rem;
             color: var(--text-dark);
             margin-top: 2px;
         }
 
         .location-box {
-            background: #ffffff;
-            border: 1px solid #fce4ec;
-            padding: 14px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(248, 187, 208, 0.15);
+            background: var(--champagne-bg);
+            border: 1px solid rgba(212, 163, 168, 0.25);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 25px;
         }
 
-        /* Botones de Acción */
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        /* Botón Único de Acción */
         .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             width: 100%;
-            padding: 14px 0;
-            border-radius: 25px;
+            padding: 15px 0;
+            border-radius: 30px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             border: none;
@@ -275,24 +280,14 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #f48fb1 0%, #d87093 100%);
+            background: linear-gradient(135deg, var(--dusty-rose) 0%, var(--rose-gold) 100%);
             color: white;
-            box-shadow: 0 6px 18px rgba(216, 112, 147, 0.3);
+            box-shadow: 0 6px 18px rgba(183, 110, 121, 0.25);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(216, 112, 147, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--rose-dark);
-            border: 1px solid var(--soft-pink);
-        }
-
-        .btn-secondary:hover {
-            background: var(--pastel-pink);
+            box-shadow: 0 8px 22px rgba(183, 110, 121, 0.35);
         }
     </style>
 </head>
@@ -303,28 +298,26 @@
         <i class="fa-solid fa-music" id="musicIcon"></i>
     </div>
     <audio id="bgAudio" loop preload="auto">
-        <!-- Reemplaza con el enlace directo a tu archivo de audio MP3 -->
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card-container" id="card">
         <div class="header-section">
-            <p class="sub-heading">Estás cordialmente invitado</p>
+            <p class="sub-heading">Acompáñanos a celebrar</p>
             <h1 class="main-title">Lía Ailany</h1>
-            <p class="event-tag">NUESTRO BABY SHOWER</p>
+            <p class="event-tag">Baby Shower</p>
         </div>
 
         <div class="image-wrapper">
-            <!-- Coloca aquí la imagen representativa o foto de ultrasonido/conejita -->
             <img class="bunny-img" src="tu_imagen_conejita.png" alt="Baby Shower Lía Ailany">
         </div>
 
         <p class="welcome-text">
-            Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables.
+            "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables."
         </p>
 
         <!-- Contador Regresivo -->
-        <div class="countdown-title">Faltan tan solo</div>
+        <div class="countdown-title">El gran día cerca está</div>
         <div class="countdown-container">
             <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Días</span></div>
             <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
@@ -353,18 +346,10 @@
                 <div class="info-value">Jardín de Eventos "Ma Salon"</div>
             </div>
 
-            <!-- Botones Interactivos sin Registro -->
-            <div class="action-buttons">
-                <!-- Abre Google Maps directamente -->
-                <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn btn-primary">
-                    <i class="fa-solid fa-map-location-dot"></i> Ver Ubicación
-                </a>
-                
-                <!-- Permite enviar un WhatsApp directo al anfitrión -->
-                <a href="https://wa.me/tuNumeroDeTelefono?text=%C2%A1Hola!%20Recib%C3%AD%20la%20invitaci%C3%B3n%20para%20el%20Baby%20Shower%20de%20L%C3%ADa%20Ailany.%20%C2%A1Ah%C3%AD%20estar%C3%A9!" target="_blank" class="btn btn-secondary">
-                    <i class="fa-brands fa-whatsapp"></i> Confirmar por WhatsApp
-                </a>
-            </div>
+            <!-- Botón para ver Ubicación -->
+            <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn btn-primary">
+                <i class="fa-solid fa-map-pin"></i> Ver Ubicación
+            </a>
         </div>
     </div>
 
@@ -378,7 +363,7 @@
 
             if (difference < 0) {
                 clearInterval(timer);
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-accent); font-weight:600;'>¡El gran día ha llegado!</p>";
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-gold); font-family:\"Cormorant Garamond\", serif; font-size: 1.2rem; font-weight:600;'>¡El gran día ha llegado!</p>";
                 return;
             }
 
@@ -410,12 +395,12 @@
             isPlaying = !isPlaying;
         }
 
-        // 3. Efecto 3D suave al mover el mouse
+        // 3. Efecto 3D sutil al mover el mouse
         const card = document.getElementById("card");
 
         document.addEventListener("mousemove", (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
 
