@@ -26,6 +26,9 @@
             --warm-white: #fffdf8;
             --text-dark: #3c3a32;
             --text-muted: #857f70;
+            /* Fondo oscuro tipo "noche cálida" */
+            --night-1: #241d13;
+            --night-2: #14100a;
         }
 
         * {
@@ -35,14 +38,14 @@
         }
 
         body {
-            background-color: var(--champagne-bg);
+            background-color: var(--night-2);
             background-image:
-                radial-gradient(at 15% 0%, rgba(169, 181, 150, 0.3) 0px, transparent 55%),
-                radial-gradient(at 85% 100%, rgba(195, 128, 95, 0.25) 0px, transparent 55%),
-                radial-gradient(circle at 50% 50%, rgba(255, 253, 248, 0.9) 0%, rgba(247, 244, 236, 1) 100%);
+                radial-gradient(at 15% 10%, rgba(169, 181, 150, 0.25) 0px, transparent 55%),
+                radial-gradient(at 85% 90%, rgba(195, 128, 95, 0.22) 0px, transparent 55%),
+                radial-gradient(circle at 50% 50%, var(--night-1) 0%, var(--night-2) 100%);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
-            min-height: 100svh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -79,9 +82,9 @@
 
         @keyframes twinkle {
             0% { opacity: 0; transform: translateY(0) scale(0.6) rotate(0deg); }
-            15% { opacity: 0.9; transform: translateY(-10px) scale(1) rotate(45deg); }
-            50% { opacity: 0.5; transform: translateY(-25px) scale(0.8) rotate(90deg); }
-            85% { opacity: 0.9; transform: translateY(-40px) scale(1) rotate(135deg); }
+            15% { opacity: 0.65; transform: translateY(-10px) scale(1) rotate(45deg); }
+            50% { opacity: 0.35; transform: translateY(-25px) scale(0.85) rotate(90deg); }
+            85% { opacity: 0.65; transform: translateY(-40px) scale(1) rotate(135deg); }
             100% { opacity: 0; transform: translateY(-55px) scale(0.6) rotate(180deg); }
         }
 
@@ -91,17 +94,17 @@
             top: 20px;
             right: 20px;
             z-index: 100;
-            background: var(--warm-white);
-            border: 1px solid var(--sage);
+            background: var(--night-1);
+            border: 1px solid var(--gold-accent);
             width: 42px;
             height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--terracotta-deep);
+            color: var(--gold-accent);
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(111, 125, 92, 0.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease;
         }
         .music-control:hover { transform: scale(1.08); }
@@ -475,14 +478,14 @@
         // Generar estrellitas de fondo animadas
         const starsContainer = document.getElementById("starsContainer");
         const starColors = ["", "sage", "terracotta"];
-        const totalStars = 28;
+        const totalStars = 40;
 
         for (let i = 0; i < totalStars; i++) {
             const star = document.createElement("i");
             star.className = "fa-solid fa-star star " + starColors[Math.floor(Math.random() * starColors.length)];
             star.style.left = Math.random() * 100 + "vw";
             star.style.top = Math.random() * 100 + "vh";
-            star.style.fontSize = (6 + Math.random() * 10) + "px";
+            star.style.fontSize = (8 + Math.random() * 12) + "px";
             star.style.animationDuration = (4 + Math.random() * 5) + "s";
             star.style.animationDelay = (Math.random() * 6) + "s";
             starsContainer.appendChild(star);
