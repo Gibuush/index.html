@@ -311,9 +311,9 @@
 <body>
 
     <div class="music-control" id="musicBtn" onclick="toggleAudio()">
-        <i class="fa-solid fa-music" id="musicIcon"></i>
+        <i class="fa-solid fa-pause" id="musicIcon"></i>
     </div>
-    <audio id="bgAudio" loop preload="auto">
+    <audio id="bgAudio" loop preload="auto" autoplay>
         <source src="pi.mp3" type="audio/mpeg">
     </audio>
 
@@ -372,9 +372,6 @@
                 </div>
             </div>
 
-            <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn">
-                <i class="fa-solid fa-map-pin"></i> Ver Ubicación
-            </a>
         </div>
     </div>
 
@@ -404,7 +401,26 @@
 
         const audio = document.getElementById("bgAudio");
         const musicIcon = document.getElementById("musicIcon");
-        let isPlaying = false;
+        let isPlaying = true;
+
+        // Intentar reproducir automáticamente al cargar la página
+        window.addEventListener("load", () => {
+            audio.play().catch(() => {
+                // Si el navegador bloquea el autoplay, se reproduce
+                // en cuanto el usuario toque/haga clic en cualquier parte
+                isPlaying = false;
+                musicIcon.className = "fa-solid fa-music";
+                const startOnInteraction = () => {
+                    audio.play();
+                    isPlaying = true;
+                    musicIcon.className = "fa-solid fa-pause";
+                    document.removeEventListener("click", startOnInteraction);
+                    document.removeEventListener("touchstart", startOnInteraction);
+                };
+                document.addEventListener("click", startOnInteraction);
+                document.addEventListener("touchstart", startOnInteraction);
+            });
+        });
 
         function toggleAudio() {
             if (isPlaying) {
