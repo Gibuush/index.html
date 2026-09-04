@@ -4,26 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación Especial - Lía Ailany</title>
-    
+
     <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    
+
     <!-- Icons via FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --rose-quartz: #f4e3e6;
-            --dusty-rose: #d4a3a8;
-            --rose-gold: #b76e79;
-            --deep-rose: #8a4b56;
-            --gold-accent: #c5a059;
-            --champagne-bg: #faf6f0;
-            --warm-white: #ffffff;
-            --text-dark: #3a3335;
-            --text-muted: #7d7073;
+            /* Misma paleta: salvia + terracota + crema + dorado */
+            --sage-light: #e7e9dc;
+            --sage: #a9b596;
+            --sage-deep: #6f7d5c;
+            --terracotta: #c3805f;
+            --terracotta-deep: #96543a;
+            --gold-accent: #b9945a;
+            --champagne-bg: #f7f4ec;
+            --warm-white: #fffdf8;
+            --text-dark: #3c3a32;
+            --text-muted: #857f70;
         }
 
         * {
@@ -33,111 +35,118 @@
         }
 
         body {
-            /* Fondo elegante generado con CSS */
             background-color: var(--champagne-bg);
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(244, 227, 230, 0.8) 0px, transparent 50%),
-                radial-gradient(at 90% 10%, rgba(212, 163, 168, 0.4) 0px, transparent 50%),
-                radial-gradient(at 50% 90%, rgba(244, 227, 230, 0.9) 0px, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.8) 0%, rgba(250, 246, 240, 1) 100%);
+            background-image:
+                radial-gradient(at 15% 0%, rgba(169, 181, 150, 0.3) 0px, transparent 55%),
+                radial-gradient(at 85% 100%, rgba(195, 128, 95, 0.25) 0px, transparent 55%),
+                radial-gradient(circle at 50% 50%, rgba(255, 253, 248, 0.9) 0%, rgba(247, 244, 236, 1) 100%);
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 25px 15px;
-            overflow-x: hidden;
-            perspective: 1000px;
+            padding: 30px 15px;
         }
 
-        /* Control de Música Flotante */
+        /* Control de música */
         .music-control {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--dusty-rose);
-            width: 44px;
-            height: 44px;
+            background: var(--warm-white);
+            border: 1px solid var(--sage);
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--rose-gold);
+            color: var(--terracotta-deep);
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(183, 110, 121, 0.15);
-            backdrop-filter: blur(8px);
-            transition: transform 0.3s ease, background 0.3s;
+            box-shadow: 0 4px 15px rgba(111, 125, 92, 0.15);
+            transition: transform 0.3s ease;
         }
+        .music-control:hover { transform: scale(1.08); }
 
-        .music-control:hover {
-            transform: scale(1.08);
-            background: #ffffff;
-        }
-
-        /* Tarjeta Principal */
+        /* ===== NUEVO DISEÑO: tarjeta tipo "arco" con cinta lateral ===== */
         .card-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--warm-white);
             width: 100%;
-            max-width: 420px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(138, 75, 86, 0.12), 0 2px 10px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(212, 163, 168, 0.4);
+            max-width: 480px;
+            border-radius: 32px;
+            box-shadow: 0 25px 55px rgba(111, 125, 92, 0.18);
             overflow: hidden;
             position: relative;
             text-align: center;
-            transform-style: preserve-3d;
-            transition: transform 0.2s ease-out;
-            animation: cardAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(169, 181, 150, 0.35);
+            animation: cardAppear 1.1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(30px) scale(0.97); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Encabezado */
-        .header-section {
-            padding: 40px 25px 10px 25px;
+        /* Cenefa decorativa superior */
+        .top-arch {
+            background: linear-gradient(160deg, var(--sage) 0%, var(--sage-deep) 100%);
+            padding: 32px 25px 48px 25px;
+            position: relative;
+            border-radius: 32px 32px 0 0;
+        }
+
+        .top-arch::after {
+            content: "";
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: var(--gold-accent);
+            opacity: 0.8;
         }
 
         .sub-heading {
             font-family: 'Cinzel', serif;
             letter-spacing: 3px;
             text-transform: uppercase;
-            font-size: 0.65rem;
-            color: var(--gold-accent);
+            font-size: 0.62rem;
+            color: var(--champagne-bg);
+            opacity: 0.9;
             font-weight: 600;
         }
 
         .main-title {
             font-family: 'Great Vibes', cursive;
-            font-size: 4rem;
-            color: var(--rose-gold);
+            font-size: 3rem;
+            color: var(--warm-white);
             line-height: 1.1;
-            margin-top: 5px;
-            font-weight: 400;
+            margin-top: 4px;
         }
 
         .event-tag {
             font-family: 'Cinzel', serif;
             letter-spacing: 2px;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--champagne-bg);
+            margin-top: 10px;
             text-transform: uppercase;
+            opacity: 0.85;
         }
 
-        /* Marco de Imagen Flotante */
+        /* Imagen de la coneja flotando entre las dos secciones */
         .image-wrapper {
-            position: relative;
-            width: 65%;
-            margin: 20px auto;
+            width: 34%;
+            margin: -42px auto 0 auto;
             border-radius: 50%;
-            padding: 8px;
-            background: linear-gradient(135deg, var(--rose-quartz) 0%, rgba(255,255,255,0) 100%);
+            padding: 6px;
+            background: var(--warm-white);
+            box-shadow: 0 10px 25px rgba(111, 125, 92, 0.25);
+            position: relative;
+            z-index: 2;
             animation: float 5s ease-in-out infinite;
         }
 
@@ -151,22 +160,19 @@
             height: auto;
             border-radius: 50%;
             display: block;
-            box-shadow: 0 8px 20px rgba(183, 110, 121, 0.15);
-            border: 2px solid var(--warm-white);
+            border: 2px solid var(--sage-light);
         }
 
-        /* Mensaje de Bienvenida */
         .welcome-text {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.45;
             color: var(--text-dark);
-            padding: 0 35px;
-            margin-bottom: 25px;
+            padding: 14px 40px 0 40px;
             font-style: italic;
         }
 
-        /* Contador Regresivo */
+        /* Contador en línea, estilo diferente (con separadores en vez de cajas) */
         .countdown-title {
             font-family: 'Cinzel', serif;
             font-size: 0.6rem;
@@ -174,126 +180,136 @@
             letter-spacing: 2px;
             color: var(--gold-accent);
             font-weight: 600;
-            margin-bottom: 12px;
+            margin: 16px 0 10px 0;
         }
 
         .countdown-container {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin: 0 20px 25px 20px;
+            align-items: center;
+            gap: 6px;
+            margin: 0 20px 18px 20px;
         }
 
         .time-box {
-            background: var(--champagne-bg);
-            border: 1px solid rgba(212, 163, 168, 0.3);
-            padding: 10px 6px;
-            border-radius: 12px;
-            min-width: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 52px;
         }
 
         .time-num {
             font-family: 'Cinzel', serif;
-            font-size: 1.25rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            color: var(--deep-rose);
+            color: var(--terracotta-deep);
             display: block;
         }
 
         .time-label {
-            font-size: 0.5rem;
+            font-size: 0.48rem;
             text-transform: uppercase;
             color: var(--text-muted);
             letter-spacing: 1px;
             margin-top: 2px;
-            display: block;
         }
 
-        /* Detalles del Evento */
+        .time-sep {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--sage);
+            margin: 0 2px 14px 2px;
+        }
+
+        /* Detalles del evento en formato de lista con línea guía, no tarjetas cuadradas */
         .details-section {
-            padding: 0 30px 35px 30px;
+            padding: 0 32px 26px 32px;
         }
 
-        .info-grid {
+        .details-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 10px 16px;
+            margin-bottom: 10px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
+            padding: 9px 0;
+            border-bottom: 1px dashed rgba(169, 181, 150, 0.5);
+            text-align: left;
         }
 
-        .info-card {
-            background: var(--champagne-bg);
-            border: 1px solid rgba(212, 163, 168, 0.25);
-            padding: 16px 10px;
-            border-radius: 16px;
+        .detail-row.full {
+            grid-column: 1 / -1;
         }
 
-        .info-icon {
-            font-size: 1.1rem;
-            color: var(--rose-gold);
-            margin-bottom: 6px;
-            display: block;
+        .detail-row:last-of-type {
+            border-bottom: none;
         }
 
-        .info-label {
+        .detail-icon {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 50%;
+            background: var(--sage-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sage-deep);
+            font-size: 1rem;
+        }
+
+        .detail-label {
             font-family: 'Cinzel', serif;
-            font-size: 0.55rem;
+            font-size: 0.52rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--gold-accent);
             font-weight: 600;
         }
 
-        .info-value {
+        .detail-value {
             font-family: 'Cormorant Garamond', serif;
             font-weight: 600;
             font-size: 1.05rem;
             color: var(--text-dark);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
-        .location-box {
-            background: var(--champagne-bg);
-            border: 1px solid rgba(212, 163, 168, 0.25);
-            padding: 16px;
-            border-radius: 16px;
-            margin-bottom: 25px;
-        }
-
-        /* Botón Único de Acción */
         .btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             width: 100%;
-            padding: 15px 0;
+            padding: 13px 0;
+            margin-top: 18px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s ease;
-            border: none;
+            border: 1px solid var(--terracotta-deep);
             cursor: pointer;
+            color: var(--terracotta-deep);
+            background: transparent;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--dusty-rose) 0%, var(--rose-gold) 100%);
-            color: white;
-            box-shadow: 0 6px 18px rgba(183, 110, 121, 0.25);
-        }
-
-        .btn-primary:hover {
+        .btn:hover {
+            background: var(--terracotta-deep);
+            color: var(--warm-white);
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(183, 110, 121, 0.35);
         }
     </style>
 </head>
 <body>
 
-    <!-- Botón de Música -->
     <div class="music-control" id="musicBtn" onclick="toggleAudio()">
         <i class="fa-solid fa-music" id="musicIcon"></i>
     </div>
@@ -302,7 +318,8 @@
     </audio>
 
     <div class="card-container" id="card">
-        <div class="header-section">
+
+        <div class="top-arch">
             <p class="sub-heading">Acompáñanos a celebrar</p>
             <h1 class="main-title">Lía Ailany</h1>
             <p class="event-tag">Baby Shower</p>
@@ -316,45 +333,52 @@
             "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables."
         </p>
 
-        <!-- Contador Regresivo -->
         <div class="countdown-title">El gran día cerca está</div>
         <div class="countdown-container">
             <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Días</span></div>
+            <span class="time-sep">:</span>
             <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
+            <span class="time-sep">:</span>
             <div class="time-box"><span class="time-num" id="minutes">00</span><span class="time-label">Min</span></div>
+            <span class="time-sep">:</span>
             <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Seg</span></div>
         </div>
 
-        <!-- Detalles del Evento -->
         <div class="details-section">
-            <div class="info-grid">
-                <div class="info-card">
-                    <i class="fa-regular fa-calendar-check info-icon"></i>
-                    <div class="info-label">Fecha</div>
-                    <div class="info-value">19 Sept, 2026</div>
+
+            <div class="details-grid">
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <div>
+                        <div class="detail-label">Fecha</div>
+                        <div class="detail-value">19 Sept, 2026</div>
+                    </div>
                 </div>
-                <div class="info-card">
-                    <i class="fa-regular fa-clock info-icon"></i>
-                    <div class="info-label">Hora</div>
-                    <div class="info-value">1:00 PM</div>
+
+                <div class="detail-row">
+                    <div class="detail-icon"><i class="fa-regular fa-clock"></i></div>
+                    <div>
+                        <div class="detail-label">Hora</div>
+                        <div class="detail-value">1:00 PM</div>
+                    </div>
+                </div>
+
+                <div class="detail-row full">
+                    <div class="detail-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <div class="detail-label">Lugar</div>
+                        <div class="detail-value">Fábrica La Concepción</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="location-box">
-                <i class="fa-solid fa-location-dot info-icon"></i>
-                <div class="info-label">Lugar</div>
-                <div class="info-value">fabrica la concepcion</div>
-            </div>
-
-            <!-- Botón para ver Ubicación -->
-            <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn btn-primary">
+            <a href="https://maps.google.com/?q=Jardin+de+Eventos" target="_blank" class="btn">
                 <i class="fa-solid fa-map-pin"></i> Ver Ubicación
             </a>
         </div>
     </div>
 
     <script>
-        // 1. Contador Regresivo
         const eventDate = new Date("September 19, 2026 13:00:00").getTime();
 
         const timer = setInterval(() => {
@@ -363,7 +387,7 @@
 
             if (difference < 0) {
                 clearInterval(timer);
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--rose-gold); font-family:\"Cormorant Garamond\", serif; font-size: 1.2rem; font-weight:600;'>¡El gran día ha llegado!</p>";
+                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--terracotta-deep); font-family:\"Cormorant Garamond\", serif; font-size: 1.2rem; font-weight:600;'>¡El gran día ha llegado!</p>";
                 return;
             }
 
@@ -378,9 +402,7 @@
             document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
         }, 1000);
 
-        // 2. Control de Audio
         const audio = document.getElementById("bgAudio");
-        const musicBtn = document.getElementById("musicBtn");
         const musicIcon = document.getElementById("musicIcon");
         let isPlaying = false;
 
@@ -395,15 +417,12 @@
             isPlaying = !isPlaying;
         }
 
-        // 3. Efecto 3D sutil al mover el mouse
         const card = document.getElementById("card");
-
         document.addEventListener("mousemove", (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 55;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 55;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
-
         document.addEventListener("mouseleave", () => {
             card.style.transform = "rotateY(0deg) rotateX(0deg)";
         });
