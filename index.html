@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación Especial - Lía Ailany</title>
 
-    <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Icons via FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* Misma paleta: salvia + terracota + crema + dorado */
+            /* Paleta: salvia + terracota + crema + dorado */
             --sage-light: #e7e9dc;
             --sage: #a9b596;
             --sage-deep: #6f7d5c;
@@ -26,7 +24,6 @@
             --warm-white: #fffdf8;
             --text-dark: #3c3a32;
             --text-muted: #857f70;
-            /* Fondo oscuro tipo "noche cálida" */
             --night-1: #241d13;
             --night-2: #14100a;
         }
@@ -51,10 +48,58 @@
             align-items: center;
             padding: 30px 15px;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* ===== Estrellitas animadas de fondo ===== */
+        /* Pantalla de inicio para permitir la música instantánea */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--night-2);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--warm-white);
+            text-align: center;
+            padding: 20px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .overlay-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--gold-accent);
+            margin-bottom: 10px;
+        }
+
+        .overlay-btn {
+            background: linear-gradient(135deg, var(--terracotta), var(--terracotta-deep));
+            color: var(--warm-white);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .overlay-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Estrellitas animadas de fondo */
         .stars-container {
             position: fixed;
             inset: 0;
@@ -72,13 +117,8 @@
             animation: twinkle linear infinite;
         }
 
-        .star.sage {
-            color: var(--sage);
-        }
-
-        .star.terracotta {
-            color: var(--terracotta);
-        }
+        .star.sage { color: var(--sage); }
+        .star.terracotta { color: var(--terracotta); }
 
         @keyframes twinkle {
             0% { opacity: 0; transform: translateY(0) scale(0.6) rotate(0deg); }
@@ -109,390 +149,8 @@
         }
         .music-control:hover { transform: scale(1.08); }
 
-        /* ===== NUEVO DISEÑO: tarjeta tipo "arco" con cinta lateral ===== */
+        /* Tarjeta principal */
         .card-container {
             background: var(--warm-white);
             width: 100%;
-            max-width: 480px;
-            border-radius: 32px;
-            box-shadow: 0 25px 55px rgba(111, 125, 92, 0.18);
-            overflow: hidden;
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            border: 1px solid rgba(169, 181, 150, 0.35);
-            animation: cardAppear 1.1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes cardAppear {
-            from { opacity: 0; transform: translateY(25px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Cenefa decorativa superior */
-        .top-arch {
-            background: linear-gradient(160deg, var(--sage) 0%, var(--sage-deep) 100%);
-            padding: 32px 25px 48px 25px;
-            position: relative;
-            border-radius: 32px 32px 0 0;
-        }
-
-        .top-arch::after {
-            content: "";
-            position: absolute;
-            bottom: 14px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: var(--gold-accent);
-            opacity: 0.8;
-        }
-
-        .sub-heading {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-size: 0.62rem;
-            color: var(--champagne-bg);
-            opacity: 0.9;
-            font-weight: 600;
-        }
-
-        .main-title {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3rem;
-            color: var(--warm-white);
-            line-height: 1.1;
-            margin-top: 4px;
-        }
-
-        .event-tag {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
-            color: var(--champagne-bg);
-            margin-top: 10px;
-            text-transform: uppercase;
-            opacity: 0.85;
-        }
-
-        /* Imagen de la coneja flotando entre las dos secciones */
-        .image-wrapper {
-            width: 34%;
-            margin: -42px auto 0 auto;
-            border-radius: 50%;
-            padding: 6px;
-            background: var(--warm-white);
-            box-shadow: 0 10px 25px rgba(111, 125, 92, 0.25);
-            position: relative;
-            z-index: 2;
-            animation: float 5s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .bunny-img {
-            width: 100%;
-            height: auto;
-            border-radius: 50%;
-            display: block;
-            border: 2px solid var(--sage-light);
-        }
-
-        .welcome-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            line-height: 1.45;
-            color: var(--text-dark);
-            padding: 14px 40px 0 40px;
-            font-style: italic;
-        }
-
-        /* Contador en línea, estilo diferente (con separadores en vez de cajas) */
-        .countdown-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gold-accent);
-            font-weight: 600;
-            margin: 16px 0 10px 0;
-        }
-
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            margin: 0 20px 18px 20px;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 52px;
-        }
-
-        .time-num {
-            font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--terracotta-deep);
-            display: block;
-        }
-
-        .time-label {
-            font-size: 0.48rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-top: 2px;
-        }
-
-        .time-sep {
-            font-family: 'Cinzel', serif;
-            font-size: 1.3rem;
-            color: var(--sage);
-            margin: 0 2px 14px 2px;
-        }
-
-        /* Detalles del evento en formato de lista con línea guía, no tarjetas cuadradas */
-        .details-section {
-            padding: 0 32px 26px 32px;
-        }
-
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px 16px;
-            margin-bottom: 10px;
-        }
-
-        .detail-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 9px 0;
-            border-bottom: 1px dashed rgba(169, 181, 150, 0.5);
-            text-align: left;
-        }
-
-        .detail-row.full {
-            grid-column: 1 / -1;
-        }
-
-        .detail-row:last-of-type {
-            border-bottom: none;
-        }
-
-        .detail-icon {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            border-radius: 50%;
-            background: var(--sage-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--sage-deep);
-            font-size: 1rem;
-        }
-
-        .detail-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.52rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gold-accent);
-            font-weight: 600;
-        }
-
-        .detail-value {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: var(--text-dark);
-            margin-top: 1px;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 13px 0;
-            margin-top: 18px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.72rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            border: 1px solid var(--terracotta-deep);
-            cursor: pointer;
-            color: var(--terracotta-deep);
-            background: transparent;
-        }
-
-        .btn:hover {
-            background: var(--terracotta-deep);
-            color: var(--warm-white);
-            transform: translateY(-2px);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="stars-container" id="starsContainer"></div>
-
-    <div class="music-control" id="musicBtn" onclick="toggleAudio()">
-        <i class="fa-solid fa-pause" id="musicIcon"></i>
-    </div>
-    <audio id="bgAudio" loop preload="auto" autoplay>
-        <source src="pi.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="card-container" id="card">
-
-        <div class="top-arch">
-            <p class="sub-heading">Acompáñanos a celebrar</p>
-            <h1 class="main-title">Lía Ailany</h1>
-            <p class="event-tag">Baby Shower</p>
-        </div>
-
-        <div class="image-wrapper">
-            <img class="bunny-img" src="descarga.jpg" alt="Baby Shower Lía Ailany">
-        </div>
-
-        <p class="welcome-text">
-            "Hay momentos en la vida que son especiales por sí solos, pero compartirlos con las personas que más queremos los hace inolvidables."
-        </p>
-
-        <div class="countdown-title">El gran día cerca está</div>
-        <div class="countdown-container">
-            <div class="time-box"><span class="time-num" id="days">00</span><span class="time-label">Días</span></div>
-            <span class="time-sep">:</span>
-            <div class="time-box"><span class="time-num" id="hours">00</span><span class="time-label">Horas</span></div>
-            <span class="time-sep">:</span>
-            <div class="time-box"><span class="time-num" id="minutes">00</span><span class="time-label">Min</span></div>
-            <span class="time-sep">:</span>
-            <div class="time-box"><span class="time-num" id="seconds">00</span><span class="time-label">Seg</span></div>
-        </div>
-
-        <div class="details-section">
-
-            <div class="details-grid">
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="fa-regular fa-calendar-check"></i></div>
-                    <div>
-                        <div class="detail-label">Fecha</div>
-                        <div class="detail-value">19 Sept, 2026</div>
-                    </div>
-                </div>
-
-                <div class="detail-row">
-                    <div class="detail-icon"><i class="fa-regular fa-clock"></i></div>
-                    <div>
-                        <div class="detail-label">Hora</div>
-                        <div class="detail-value">1:00 PM</div>
-                    </div>
-                </div>
-
-                <div class="detail-row full">
-                    <div class="detail-icon"><i class="fa-solid fa-location-dot"></i></div>
-                    <div>
-                        <div class="detail-label">Lugar</div>
-                        <div class="detail-value">Fábrica La Concepción</div>
-                    </div>
-                </div>
-            </div>
-
-            <a href="https://www.google.com/maps/place/19%C2%B037'55.3%22N+100%C2%B008'36.7%22W/@19.6322498,-100.1436544,337m/data=!3m1!1e3!4m4!3m3!8m2!3d19.6320278!4d-100.1435278?hl=en&entry=ttu&g_ep=EgoyMDI2MDkwMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="btn">
-                <i class="fa-solid fa-map-pin"></i> Ver Ubicación
-            </a>
-        </div>
-    </div>
-
-    <script>
-        const eventDate = new Date("September 19, 2026 13:00:00").getTime();
-
-        const timer = setInterval(() => {
-            const now = new Date().getTime();
-            const difference = eventDate - now;
-
-            if (difference < 0) {
-                clearInterval(timer);
-                document.querySelector(".countdown-container").innerHTML = "<p style='color:var(--terracotta-deep); font-family:\"Cormorant Garamond\", serif; font-size: 1.2rem; font-weight:600;'>¡El gran día ha llegado!</p>";
-                return;
-            }
-
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days < 10 ? '0' + days : days;
-            document.getElementById("hours").innerText = hours < 10 ? '0' + hours : hours;
-            document.getElementById("minutes").innerText = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
-        }, 1000);
-
-        const audio = document.getElementById("bgAudio");
-        const musicIcon = document.getElementById("musicIcon");
-        let isPlaying = true;
-
-        // Intentar reproducir automáticamente al cargar la página
-        window.addEventListener("load", () => {
-            audio.play().catch(() => {
-                // Si el navegador bloquea el autoplay, se reproduce
-                // en cuanto el usuario toque/haga clic en cualquier parte
-                isPlaying = false;
-                musicIcon.className = "fa-solid fa-music";
-                const startOnInteraction = () => {
-                    audio.play();
-                    isPlaying = true;
-                    musicIcon.className = "fa-solid fa-pause";
-                    document.removeEventListener("click", startOnInteraction);
-                    document.removeEventListener("touchstart", startOnInteraction);
-                };
-                document.addEventListener("click", startOnInteraction);
-                document.addEventListener("touchstart", startOnInteraction);
-            });
-        });
-
-        function toggleAudio() {
-            if (isPlaying) {
-                audio.pause();
-                musicIcon.className = "fa-solid fa-music";
-            } else {
-                audio.play();
-                musicIcon.className = "fa-solid fa-pause";
-            }
-            isPlaying = !isPlaying;
-        }
-
-        // Generar estrellitas de fondo animadas
-        const starsContainer = document.getElementById("starsContainer");
-        const starColors = ["", "sage", "terracotta"];
-        const totalStars = 40;
-
-        for (let i = 0; i < totalStars; i++) {
-            const star = document.createElement("i");
-            star.className = "fa-solid fa-star star " + starColors[Math.floor(Math.random() * starColors.length)];
-            star.style.left = Math.random() * 100 + "vw";
-            star.style.top = Math.random() * 100 + "vh";
-            star.style.fontSize = (8 + Math.random() * 12) + "px";
-            star.style.animationDuration = (4 + Math.random() * 5) + "s";
-            star.style.animationDelay = (Math.random() * 6) + "s";
-            starsContainer.appendChild(star);
-        }
-    </script>
-</body>
-</html>
+            max
