@@ -6,7 +6,7 @@
     <title>Invitación Especial - Lía Ailany</title>
 
     <!-- Precarga de la música: empieza a descargarse desde el primer instante -->
-    <link rel="preload" href="pi.mp3" as="audio">
+    <link rel="preload" href="pi_vzqH7Owd.mp3" as="audio">
 
     <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -451,8 +451,8 @@
     <div class="music-control" id="musicBtn" onclick="toggleAudio()">
         <i class="fa-solid fa-music" id="musicIcon"></i>
     </div>
-    <audio id="bgAudio" loop preload="auto">
-        <source src="pi.mp3" type="audio/mpeg">
+    <audio id="bgAudio" loop preload="auto" autoplay>
+        <source src="pi_vzqH7Owd.mp3" type="audio/mpeg">
     </audio>
 
     <div class="card-container" id="card">
@@ -544,7 +544,6 @@
         const musicIcon = document.getElementById("musicIcon");
         const welcomeOverlay = document.getElementById("welcomeOverlay");
         const openInviteBtn = document.getElementById("openInviteBtn");
-        const openInviteText = document.getElementById("openInviteText");
         let isPlaying = false;
 
         // Habilitar el botón en cuanto la canción tenga suficiente
@@ -555,18 +554,34 @@
         }
 
         audio.addEventListener("canplaythrough", enableInviteBtn, { once: true });
-
-        // Respaldo: si por conexión muy lenta el evento no llega,
-        // se habilita de todas formas a los 6 segundos
         setTimeout(enableInviteBtn, 6000);
 
-        // Al tocar "Abrir Invitación": se oculta la pantalla de bienvenida,
-        // se muestra la tarjeta y arranca la música (ya lista para sonar)
+        // Intentar reproducir automáticamente desde que abre la página,
+        // sin esperar ningún clic
+        function tryAutoplay() {
+            audio.play()
+                .then(() => {
+                    isPlaying = true;
+                    musicIcon.className = "fa-solid fa-pause";
+                })
+                .catch(() => {
+                    // El navegador bloqueó el autoplay; sonará en cuanto
+                    // la persona toque el botón o cualquier parte de la pantalla
+                    isPlaying = false;
+                    musicIcon.className = "fa-solid fa-music";
+                });
+        }
+        tryAutoplay();
+
+        // Al tocar "Abrir Invitación": se oculta la pantalla de bienvenida
+        // y, si el autoplay fue bloqueado, aquí sí arranca la música
         openInviteBtn.addEventListener("click", () => {
             welcomeOverlay.classList.add("hidden");
-            audio.play();
-            isPlaying = true;
-            musicIcon.className = "fa-solid fa-pause";
+            if (!isPlaying) {
+                audio.play();
+                isPlaying = true;
+                musicIcon.className = "fa-solid fa-pause";
+            }
         });
 
         function toggleAudio() {
