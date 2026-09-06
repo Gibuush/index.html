@@ -351,16 +351,92 @@
             color: var(--warm-white);
             transform: translateY(-2px);
         }
+
+        /* ===== Pantalla de bienvenida / carga ===== */
+        .welcome-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+            background-color: var(--night-2);
+            background-image:
+                radial-gradient(at 15% 10%, rgba(169, 181, 150, 0.25) 0px, transparent 55%),
+                radial-gradient(at 85% 90%, rgba(195, 128, 95, 0.22) 0px, transparent 55%);
+            text-align: center;
+            padding: 30px;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+
+        .welcome-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.6rem;
+            color: var(--gold-accent);
+        }
+
+        .welcome-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: var(--sage-light);
+            max-width: 280px;
+            line-height: 1.5;
+        }
+
+        .welcome-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 32px;
+            border-radius: 30px;
+            border: 1px solid var(--gold-accent);
+            background: transparent;
+            color: var(--gold-accent);
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .welcome-btn:hover {
+            background: var(--gold-accent);
+            color: var(--night-2);
+            transform: translateY(-2px);
+        }
+
+        .welcome-btn i {
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
     <div class="stars-container" id="starsContainer"></div>
 
-    <div class="music-control" id="musicBtn" onclick="toggleAudio()">
-        <i class="fa-solid fa-pause" id="musicIcon"></i>
+    <!-- Pantalla de bienvenida: da tiempo a que la música cargue antes de mostrar la tarjeta -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <p class="welcome-title">Lía Ailany</p>
+        <p class="welcome-sub">Con cariño, te invitamos a celebrar este momento tan especial</p>
+        <button class="welcome-btn" id="openInviteBtn">
+            <i class="fa-solid fa-envelope-open-text"></i> Abrir Invitación
+        </button>
     </div>
-    <audio id="bgAudio" loop preload="auto" autoplay>
+
+    <div class="music-control" id="musicBtn" onclick="toggleAudio()">
+        <i class="fa-solid fa-music" id="musicIcon"></i>
+    </div>
+    <audio id="bgAudio" loop preload="auto">
         <source src="pi.mp3" type="audio/mpeg">
     </audio>
 
@@ -451,23 +527,17 @@
 
         const audio = document.getElementById("bgAudio");
         const musicIcon = document.getElementById("musicIcon");
-        let isPlaying = true;
+        const welcomeOverlay = document.getElementById("welcomeOverlay");
+        const openInviteBtn = document.getElementById("openInviteBtn");
+        let isPlaying = false;
 
-        // Intentar reproducir automáticamente de inmediato, sin espera
-        audio.play().catch(() => {
-            // Si el navegador bloquea el autoplay, se reproduce
-            // en cuanto el usuario toque/haga clic en cualquier parte
-            isPlaying = false;
-            musicIcon.className = "fa-solid fa-music";
-            const startOnInteraction = () => {
-                audio.play();
-                isPlaying = true;
-                musicIcon.className = "fa-solid fa-pause";
-                document.removeEventListener("click", startOnInteraction);
-                document.removeEventListener("touchstart", startOnInteraction);
-            };
-            document.addEventListener("click", startOnInteraction);
-            document.addEventListener("touchstart", startOnInteraction);
+        // Al tocar "Abrir Invitación": se oculta la pantalla de bienvenida,
+        // se muestra la tarjeta y arranca la música (ya con tiempo de haber cargado)
+        openInviteBtn.addEventListener("click", () => {
+            welcomeOverlay.classList.add("hidden");
+            audio.play();
+            isPlaying = true;
+            musicIcon.className = "fa-solid fa-pause";
         });
 
         function toggleAudio() {
