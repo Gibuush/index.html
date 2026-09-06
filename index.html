@@ -418,6 +418,21 @@
         .welcome-btn i {
             font-size: 0.9rem;
         }
+
+        .welcome-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .welcome-btn:disabled:hover {
+            background: transparent;
+            color: var(--gold-accent);
+        }
+
+        .fa-spin-slow {
+            animation: fa-spin 1.2s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -428,8 +443,8 @@
     <div class="welcome-overlay" id="welcomeOverlay">
         <p class="welcome-title">Lía Ailany</p>
         <p class="welcome-sub">Con cariño, te invitamos a celebrar este momento tan especial</p>
-        <button class="welcome-btn" id="openInviteBtn">
-            <i class="fa-solid fa-envelope-open-text"></i> Abrir Invitación
+        <button class="welcome-btn" id="openInviteBtn" disabled>
+            <i class="fa-solid fa-circle-notch fa-spin-slow"></i> <span id="openInviteText">Cargando música...</span>
         </button>
     </div>
 
@@ -529,10 +544,24 @@
         const musicIcon = document.getElementById("musicIcon");
         const welcomeOverlay = document.getElementById("welcomeOverlay");
         const openInviteBtn = document.getElementById("openInviteBtn");
+        const openInviteText = document.getElementById("openInviteText");
         let isPlaying = false;
 
+        // Habilitar el botón en cuanto la canción tenga suficiente
+        // audio descargado para reproducirse sin cortes
+        function enableInviteBtn() {
+            openInviteBtn.disabled = false;
+            openInviteBtn.innerHTML = '<i class="fa-solid fa-envelope-open-text"></i> Abrir Invitación';
+        }
+
+        audio.addEventListener("canplaythrough", enableInviteBtn, { once: true });
+
+        // Respaldo: si por conexión muy lenta el evento no llega,
+        // se habilita de todas formas a los 6 segundos
+        setTimeout(enableInviteBtn, 6000);
+
         // Al tocar "Abrir Invitación": se oculta la pantalla de bienvenida,
-        // se muestra la tarjeta y arranca la música (ya con tiempo de haber cargado)
+        // se muestra la tarjeta y arranca la música (ya lista para sonar)
         openInviteBtn.addEventListener("click", () => {
             welcomeOverlay.classList.add("hidden");
             audio.play();
