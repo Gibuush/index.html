@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación Especial - Lía Ailany</title>
 
+    <!-- Precarga de la música: empieza a descargarse desde el primer instante -->
+    <link rel="preload" href="pi.mp3" as="audio">
+
     <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Icons via FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Icons via FontAwesome (carga asíncrona para no bloquear el render) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <style>
         :root {
@@ -109,7 +114,7 @@
         }
         .music-control:hover { transform: scale(1.08); }
 
-        /* ===== Tarjeta tipo "arco" con cinta lateral ===== */
+        /* ===== NUEVO DISEÑO: tarjeta tipo "arco" con cinta lateral ===== */
         .card-container {
             background: var(--warm-white);
             width: 100%;
@@ -212,7 +217,7 @@
             font-style: italic;
         }
 
-        /* Contador en línea, con separadores */
+        /* Contador en línea, estilo diferente (con separadores en vez de cajas) */
         .countdown-title {
             font-family: 'Cinzel', serif;
             font-size: 0.6rem;
@@ -261,7 +266,7 @@
             margin: 0 2px 14px 2px;
         }
 
-        /* Detalles del evento */
+        /* Detalles del evento en formato de lista con línea guía, no tarjetas cuadradas */
         .details-section {
             padding: 0 32px 26px 32px;
         }
